@@ -1,5 +1,5 @@
-<html>
-<body>
+<!-- <html>
+<body> -->
 <!-- repeated header: note that the #include is in a HTML comment -->
 <!--#include file="index.html" -->
 <!-- <nav class="navbar navbar-expand-lg navbar-light bg-light rounded-bottom" id="navbar-core">
@@ -19,7 +19,7 @@
       </ul>
     </div>
   </nav> -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light rounded-bottom" id="navbar-core">
+<!-- <nav class="navbar navbar-expand-lg navbar-light bg-light rounded-bottom" id="navbar-core">
     <a class="navbar-brand" href="#">The Nexus</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -37,4 +37,4 @@
     </div>
   </nav>
 </body>
-</html>
+</html> -->
