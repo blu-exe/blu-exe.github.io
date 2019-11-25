@@ -8,8 +8,15 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>Hello!</title>
+  <link rel="stylesheet" type="text/css" href = "./style.css">
   <link rel="stylesheet" type="text/css" href = "https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+
+<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+<!-- <script src="persistent/persistent.js"></script> -->
+
+  <title>Hello!</title>
 </head>
 
 
@@ -18,23 +25,7 @@
 <body>
   <div class="container">
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="#">The Nexus</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-    
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="#">Home<span class="sr-only">(current)</span></a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Link to the past</a>
-          </li>
-        </ul>
-      </div>
-    </nav>
+    <div id="navbar-core"></div>
     <div class="page-header">
       <h1>Hello.</h1>
     </div>
@@ -47,11 +38,10 @@
   </div>
 </body>
 
-
-
-
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+<script>
+$.get("persistent/persistent.html", function(data){
+    $("#navbar-core").replaceWith(data);
+});
+</script>
 
 </html>
