@@ -2,7 +2,7 @@
     padding-block: 30px;
 }
 
-.container {
+.container-fluid {
     background-image: url("img/yVibYhs.jpg");
     background-size: cover;
     height: 1000px;
@@ -21,4 +21,8 @@ h1 {
 #generate {
     border-width: 5px;
     border-color: grey;
+}
+
+.container {
+    
 }
