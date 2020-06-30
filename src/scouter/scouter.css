@@ -270,13 +270,7 @@ h1 {
     text-align: center;
 }
 
-
-/* 
-#staticBox {
-
-}
-
-
-#headerTemp {
-    white-space: nowrap;
+.page-header {
+    padding-top: 30px !important;
+    padding-bottom: 30px !important;
 }

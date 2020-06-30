@@ -23,6 +23,7 @@ h1 {
     border-color: grey;
 }
 
-.container {
-    
+.page-header {
+    padding-top: 30px !important;
+    padding-bottom: 30px !important;
 }
