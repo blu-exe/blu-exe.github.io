@@ -1,0 +1,19 @@
+
+.board {
+    width: 80%;
+    height: 80%;
+    margin-right: auto;
+    margin-left: auto;
+    table-layout: fixed;
+}
+
+td {
+    text-align: center;
+    font-size: 500%;
+    padding-top: 5%;
+    padding-bottom: 5%;
+}
+
+.top {
+    border-bottom: grey;
+}
