@@ -1,16 +1,24 @@
-.page-header {
-    padding-block: 30px;
-}
-
-.container-fluid {
-    background-image: url("img/yVibYhs.jpg");
+.background {
+    background: 
+        url("img/thumb-1920-600708.jpg"),
+        url("img/yVibYhs.jpg");
     background-size: cover;
     height: 1000px;
 }
 
 h1 {
-    color: black !important;
-    padding: 10px;
+    padding-left: 1.0rem;
+}
+
+.lead {
+    color: ivory;
+    padding-left: 1.4rem;
+    font-size: 2rem !important;
+}
+
+.hello {
+    color: ivory;
+    font-size: 18.6rem !important;
 }
 
 .chord-display {
@@ -21,9 +29,4 @@ h1 {
 #generate {
     border-width: 5px;
     border-color: grey;
-}
-
-.page-header {
-    padding-top: 30px !important;
-    padding-bottom: 30px !important;
 }
