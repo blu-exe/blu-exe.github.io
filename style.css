@@ -1,24 +1,24 @@
+html {
+    scroll-behavior: smooth;
+}
 .background {
     background: 
-        url("img/thumb-1920-600708.jpg"),
+        url("img/thumb-1920-600708.jpg") no-repeat,
         url("img/yVibYhs.jpg");
-    background-size: cover;
-    height: 1000px;
+    background-size: auto;
 }
 
-h1 {
-    padding-left: 1.0rem;
-}
 
 .lead {
-    color: ivory;
-    padding-left: 1.4rem;
+    color: whitesmoke;
     font-size: 2rem !important;
+    padding-left: 3rem;
 }
 
 .hello {
-    color: ivory;
+    color: whitesmoke;
     font-size: 18.6rem !important;
+    padding-left: 1.7rem;
 }
 
 .chord-display {
@@ -28,5 +28,32 @@ h1 {
 
 #generate {
     border-width: 5px;
-    border-color: grey;
+    border-color: grey;     
+}
+
+p {
+    font-size: 3rem;
+}
+ 
+::-webkit-scrollbar {
+    width: 0px;
+    background: transparent; /* make scrollbar transparent */
+}
+
+.scrollspy::-webkit-scrollbar {
+    width: 0px;
+    background: transparent; /* make scrollbar transparent */
+}
+
+.table-of-contents {
+    position: fixed;
+    bottom: 1.3rem;
+    right: 1.3rem;
+    width: 15%;
+}
+
+.page-header-etc {
+    padding-top: 6.0rem;
+    padding-bottom: 2.0rem;
+    padding-left: 0.5rem;
 }

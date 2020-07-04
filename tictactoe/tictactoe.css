@@ -14,6 +14,11 @@ td {
     padding-bottom: 5%;
 }
 
-.top {
-    border-bottom: grey;
+.top-0 {
+    border-bottom: grey !important;
+    border-bottom-style: solid !important;
+}
+
+.space {
+    text-align: center !important;
 }

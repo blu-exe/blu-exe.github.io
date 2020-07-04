@@ -10,9 +10,10 @@
 
   <link rel='icon' href='../img/favicon.ico' type='image/x-icon'/ >
 
+  <link rel="stylesheet" type="text/css" href = "./tictactoe.css">
   <link rel="stylesheet" type="text/css" href = "../style.css">
   <link rel="stylesheet" type="text/css" href = "https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
-  <link rel="stylesheet" type="text/css" href = "./tictactoe.css">
+
 
 <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
@@ -28,32 +29,29 @@
 
     <div id="navbar-core"></div>
 
-    <div class="page-header">
-      <h1>Crappy Tic Tac Toe</h1>
+    <div>
+      <h1 class="page-header-etc">Crappy Tic Tac Toe</h1>
     </div>
 
-    <div class="jumbotron jumbotron-fluid board-container">
-
-        <table class="board">
-          <tr>
-            <td class="top-left top">X</td>
-            <td class="top-mid top">X</td>
-            <td class="top-right top">X</td>
-          </tr>
-          <tr>
-            <td class="center-left center">X</td>
-            <td class="center-mid center">X</td>
-            <td class="center-right center">X</td>
-          </tr>
-          <tr>
-            <td class="bottom-left bottom">X</td>
-            <td class="bottom-mid bottom">X</td>
-            <td class="bottom-right bottom">X</td>
-          </tr>
-        </table>
-
+    <div class="container container-fluid">
+      <div class="jumbotron board-container">
+        <div class="row">
+          <div class="col top top-0"><p class="space">X</p></div>
+          <div class="col top top-1"><p class="space">X</p></div>
+          <div class="col top top-2"><p class="space">X</p></div>
+        </div>
+        <div class="row">
+          <div class="col mid mid-0"><p class="space">X</p></div>
+          <div class="col mid mid-1"><p class="space">X</p></div>
+          <div class="col mid mid-2"><p class="space">X</p></div>
+        </div>
+        <div class="row">
+          <div class="col bot bot-0"><p class="space">X</p></div>
+          <div class="col bot bot-1"><p class="space">X</p></div>
+          <div class="col bot bot-2"><p class="space">X</p></div>
+        </div>
+      </div>
     </div>
-
   </div>
 </body>
 
