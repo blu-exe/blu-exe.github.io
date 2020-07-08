@@ -33,25 +33,23 @@
       <h1 class="page-header-etc">Crappy Tic Tac Toe</h1>
     </div>
 
-    <div class="container container-fluid">
-      <div class="jumbotron board-container">
-        <div class="row">
-          <div class="col top top-0"><p class="space">X</p></div>
-          <div class="col top top-1"><p class="space">X</p></div>
-          <div class="col top top-2"><p class="space">X</p></div>
-        </div>
-        <div class="row">
-          <div class="col mid mid-0"><p class="space">X</p></div>
-          <div class="col mid mid-1"><p class="space">X</p></div>
-          <div class="col mid mid-2"><p class="space">X</p></div>
-        </div>
-        <div class="row">
-          <div class="col bot bot-0"><p class="space">X</p></div>
-          <div class="col bot bot-1"><p class="space">X</p></div>
-          <div class="col bot bot-2"><p class="space">X</p></div>
-        </div>
-      </div>
+
+    <div class="board-container">
+
+        <div class="cell top top-0"><p class="space-0"></p></div>
+        <div class="cell top top-1"><p class="space-1"></p></div>
+        <div class="cell top top-2"><p class="space-2"></p></div>
+
+        <div class="cell mid mid-0"><p class="space-3"></p></div>
+        <div class="cell mid mid-1"><p class="space-4"></p></div>
+        <div class="cell mid mid-2"><p class="space-5"></p></div>
+
+        <div class="cell bot bot-0"><p class="space-6"></p></div>
+        <div class="cell bot bot-1"><p class="space-7"></p></div>
+        <div class="cell bot bot-2"><p class="space-8"></p></div>
+
     </div>
+
   </div>
 </body>
 
@@ -60,5 +58,7 @@ $.get("../persistent.html", function(data){
     $("#navbar-core").replaceWith(data);
 });
 </script>
+
+<script src="tictactoe.js"></script>
 
 </html>
