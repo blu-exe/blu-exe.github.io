@@ -1,4 +1,5 @@
 var turn = "X";
+
 /*  
     [0, 1, 2]
     [3, 4, 5]
@@ -32,6 +33,10 @@ function handleClick(e) {
     appendPlayer(e);
     if (checkWin()) {
         console.log("player " + turn + " won!");
+        $(".winner-text").text("player " + turn + " won!");
+        $(".modal").modal("show");
+        reset();
+
     };
     turn = (turn == "X") ? "O" : "X";
 }
@@ -47,7 +52,21 @@ function checkWin() {
     //.some iterates through array seeing if one matches
     return WINNING_PATTERNS.some(cells => {
         return cells.every(index => {
-            return allCells[index].contains(turn);
+            console.log(allCells[index].childNodes[0].textContent)
+            return allCells[index].childNodes[0].textContent == turn;
         })
+    })
+}
+
+function reset() {
+    console.log("reset run");
+    allCells.forEach(cell => {
+        console.log(cell.childNodes[0].innerHTML);
+        cell.childNodes[0].innerHTML = "";
+
+        cell.removeEventListener("click", handleClick);
+
+        cell.addEventListener("click", handleClick, {once: true});
+
     })
 }
