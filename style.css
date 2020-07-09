@@ -11,14 +11,14 @@ html {
 
 .lead {
     color: whitesmoke;
-    font-size: 2rem !important;
-    padding-left: 3rem;
+    font-size: 2.2vw !important;
+    padding-left: 4.5vw;
 }
 
 .hello {
     color: whitesmoke;
-    font-size: 18.6rem !important;
-    padding-left: 1.7rem;
+    font-size: 30vw !important;
+    padding-left: 2vw;
 }
 
 .chord-display {
@@ -32,7 +32,7 @@ html {
 }
 
 .list-header {
-    font-size: 3rem !important;
+    font-size: 3.5vw !important;
 }
  
 ::-webkit-scrollbar {
@@ -45,11 +45,13 @@ html {
     background: transparent; /* make scrollbar transparent */
 }
 
-.table-of-contents {
-    position: fixed;
-    bottom: 1.3rem;
-    right: 1.3rem;
-    width: 15%;
+@media (min-width: 576px) {
+    .table-of-contents {
+        position: fixed;
+        bottom: 1.3rem;
+        right: 1.3rem;
+        width: 15%;
+    }
 }
 
 .page-header-etc {
@@ -59,5 +61,5 @@ html {
 }
 
 .list-des {
-    font-size: 1.3rem;
+    font-size: 1.5vw;
 }

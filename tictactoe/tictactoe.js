@@ -28,16 +28,24 @@ allCells.forEach(cell => {
     cell.addEventListener("click", handleClick, {once: true});
 })  
 
+function checkBlank(cell) {
+    console.log("checking " + cell + " value is " + cell.innerHTML);
+    return cell.childNodes[0].innerHTML !== "";
+}
+
 function handleClick(e) {
-    console.log("clicekd");
     appendPlayer(e);
     if (checkWin()) {
-        console.log("player " + turn + " won!");
         $(".winner-text").text("player " + turn + " won!");
+        $(".winner-title").text("YOU ARE WINOR");
         $(".modal").modal("show");
         reset();
-
-    };
+    } else if (Array.from(allCells).every(checkBlank)) {
+        $(".winner-text").text("n o  o n e  w o n  !");
+        $(".winner-title").text("ttttiee");
+        $(".modal").modal("show");
+        reset();
+    }
     turn = (turn == "X") ? "O" : "X";
 }
 
@@ -45,14 +53,12 @@ function appendPlayer(e) {
     var cellClicked = e.target;
     var append = document.createTextNode(turn);
     cellClicked.childNodes[0].appendChild(append);
-    
 }
 
 function checkWin() {
     //.some iterates through array seeing if one matches
     return WINNING_PATTERNS.some(cells => {
         return cells.every(index => {
-            console.log(allCells[index].childNodes[0].textContent)
             return allCells[index].childNodes[0].textContent == turn;
         })
     })
@@ -61,12 +67,8 @@ function checkWin() {
 function reset() {
     console.log("reset run");
     allCells.forEach(cell => {
-        console.log(cell.childNodes[0].innerHTML);
         cell.childNodes[0].innerHTML = "";
-
         cell.removeEventListener("click", handleClick);
-
         cell.addEventListener("click", handleClick, {once: true});
-
     })
 }
