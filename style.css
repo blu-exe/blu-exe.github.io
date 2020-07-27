@@ -63,3 +63,12 @@ html {
 .list-des {
     font-size: 1.5vw;
 }
+
+.audio {
+    padding-top: 0.2rem;
+    padding-bottom: 0.2rem;
+}
+
+.paragraph-break {
+    padding-bottom: 2.2rem;
+}
