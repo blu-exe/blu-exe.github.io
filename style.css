@@ -72,3 +72,21 @@ html {
 .paragraph-break {
     padding-bottom: 2.2rem;
 }
+
+.list-top-padding {
+    padding-top: 2.5rem;
+}
+
+.list-bot-padding {
+    padding-bottom: 2.5rem;
+}
+
+.divider {
+    background-color: grey;
+    height: 2px;
+}
+
+.robot-pic {
+    width: 80%;
+    height: auto;
+}
