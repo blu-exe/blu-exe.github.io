@@ -1,6 +1,39 @@
 html {
     scroll-behavior: smooth;
 }
+
+@media (min-width: 1024px) {
+    .table-of-contents {
+        position: fixed;
+        bottom: 1.3rem;
+        right: 1.3rem;
+        width: 15%;
+    }
+    .jumbotron {
+        width: 75%;
+    }
+    .big-enchilada {
+        padding-left:3.7vw;
+    }
+}
+@media (max-width: 1024px) {
+    .table-of-contents {
+        display: none;
+    }
+    .no-mobile {
+        display: none;
+    }
+    .jumbotron {
+        width: 100%;
+    }
+    .row {
+        padding: 2px !important;
+    }
+    .hello {
+        padding-top: 5vh;
+    }
+}
+
 .background {
     background: 
         url("img/thumb-1920-600708.jpg") no-repeat,
@@ -8,10 +41,9 @@ html {
     background-size: auto;
 }
 
-
 .lead {
     color: whitesmoke;
-    font-size: 2.2vw !important;
+    font-size: calc(14px + 1.5vw) !important;
     padding-left: 4.5vw;
 }
 
@@ -32,7 +64,7 @@ html {
 }
 
 .list-header {
-    font-size: 3.5vw !important;
+    font-size: calc(14px + 3vw) !important;
 }
  
 ::-webkit-scrollbar {
@@ -45,14 +77,6 @@ html {
     background: transparent; /* make scrollbar transparent */
 }
 
-@media (min-width: 576px) {
-    .table-of-contents {
-        position: fixed;
-        bottom: 1.3rem;
-        right: 1.3rem;
-        width: 15%;
-    }
-}
 
 .page-header-etc {
     padding-top: 6.0rem;
@@ -61,7 +85,7 @@ html {
 }
 
 .list-des {
-    font-size: 1.5vw;
+    font-size: calc(14px + 0.6vw);
 }
 
 .audio {
@@ -73,12 +97,13 @@ html {
     padding-bottom: 2.2rem;
 }
 
+
 .list-top-padding {
     padding-top: 2.5rem;
 }
 
 .list-bot-padding {
-    padding-bottom: 2.5rem;
+    padding-bottom: 3vh;
 }
 
 .divider {
@@ -89,4 +114,38 @@ html {
 .robot-pic {
     width: 80%;
     height: auto;
+}
+
+#jazz:hover {
+    font-style: italic;
+    font-weight: bold;
+
+    text-transform: uppercase;
+    background-image: linear-gradient(
+        90deg,
+        #3d2580 0%,
+        #eb2a75 50%,
+        #6dadde 67%, 
+        #02285d 100% 
+    );
+    background-size: auto auto;
+    background-clip: border-box;
+    background-size: 200% auto;
+    color: #fff;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: textclip 2s linear infinite;
+    display: inline-block;
+        font-size: 20px;
+}
+
+@keyframes textclip {
+  to {
+    background-position: 200% center;
+  }
+}
+
+h4 {
+    
 }
