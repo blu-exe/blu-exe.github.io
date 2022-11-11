@@ -48,11 +48,18 @@ for champ in all_champ_names:
     data[champ][i]["damageTypes"] = damage_types[i]
     data[champ][i]["lvlUp"] = lvl_up[i]
 
+# Serializing json 
+json_object = json.dumps(data, indent = 4)
+  
+# Writing to sample.json
+with open("ver1.json", "w") as outfile:
+    outfile.write(json_object)
+
     
 
-while True:
-  try: 
-    search_champ = str(input("Champ Name: "))
-    print(data[search_champ])
-  except Exception:
-    print("Try a different input.")
+# while True:
+#   try: 
+#     search_champ = str(input("Champ Name: "))
+#     print(data[search_champ])
+#   except Exception:
+#     print("Try a different input.")

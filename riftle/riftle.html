@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <link rel='icon' href='../img/favicon.ico' type='image/x-icon'/ >
+
+  <link rel="stylesheet" type="text/css" href = "../style.css">
+  <link rel="stylesheet" type="text/css" href = "https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+
+<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+<script type="module" src="./ddragondata/ddragondata.js"></script>
+<script type="module" src="./riftle.js"></script>
+
+  <title>Riftle</title>
+</head>
+
+
+
+<body>
+
+
+  <div class="container-fluid">
+
+    <div id="navbar-core"></div>
+
+    <div class="page-header-etc">
+      <h1>League of Legends Wordle (very much a WIP)</h1>
+    </div>
+    <div class="jumbotron">
+        <div class="input-group mb-3">
+            <input type="text" class="ability-input form-control" placeholder="Ability Name" aria-label="Ability Name" aria-describedby="basic-addon1">
+            <button class="btn btn-outline-secondary" id="search-button" type="button" id="button-addon2">Search</button>
+        </div>
+        <table class="table">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Ability</th>
+              <th scope="col">Champ Name</th>
+              <th scope="col">CC Types</th>
+              <th scope="col">Level Up Scaling</th>
+            </tr>
+          </thead>
+          <tbody class="table-body">
+            <!-- <tr>
+              <th scope="row">1</th>
+              <td>Mark</td>
+              <td>Otto</td>
+              <td>@mdo</td>
+            </tr> -->
+          </tbody>
+        </table>
+    </div>
+  </div>
+</body>
+
+<script>
+$.get("../persistent.html", function(data){
+    $("#navbar-core").replaceWith(data);
+});
+</script>
+
+</html>
