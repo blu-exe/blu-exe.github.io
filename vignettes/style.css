@@ -1,3 +1,28 @@
-#cell {
+.cell {
     text-align: center;
+    padding:80px;
+}
+
+#seven {
+    background: url("img/IMG_6774_(1).jpg");
+    background-size: cover;
+    background-position-y: center;
+    background-position-x: -10px;
+}
+
+#yifang {
+    background: url("img/IMG_3576.jpg");
+    background-size: cover;
+    background-position-y: center;
+}
+
+#northbranch {
+    background: url("img/IMG_3577.jpg");
+    background-size: cover;
+    background-position-y: -25px;
+}
+
+#mutually {
+    background: url("img/IMG_1739.jpg");
+    background-size: cover;
 }
