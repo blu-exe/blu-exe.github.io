@@ -1,6 +1,14 @@
 .cell {
     text-align: center;
-    padding:80px;
+    padding: 20px;
+    height: 35vh !important;
+}
+
+.title {
+    padding-top: 20px;
+    font-family: 'Courier New', Courier, monospace !important;
+    font-style: italic;
+    font-variant: small-caps;
 }
 
 #seven {
