@@ -34,3 +34,9 @@
     background: url("img/IMG_1739.jpg");
     background-size: cover;
 }
+
+.svg {
+    top: -30vh;
+    left: 50vh;
+    position: relative;
+}

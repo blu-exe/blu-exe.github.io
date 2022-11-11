@@ -32,15 +32,27 @@ function getFinalCoords(elem) {
 }
 
 function focus(elem) {
+    //animate image movement
     var finalCoords = getFinalCoords(elem)
-    const coords = {x: 0, y: 0} // Start at (0, 0)
-    const tween = new TWEEN.Tween(coords) // Create a new tween that modifies 'coords'.
-        .to({x: finalCoords[0], y: finalCoords[1]}, 1000) // Move to (300, 200) in 1 second.
-        .easing(TWEEN.Easing.Quadratic.Out) // Use an easing function to make the animation smooth.
+    const coords = {x: 0, y: 0}
+    const tween1 = new TWEEN.Tween(coords)
+        .to({x: finalCoords[0], y: finalCoords[1]}, 1000)
+        .easing(TWEEN.Easing.Quadratic.Out)
         .onUpdate(() => {
-            // Called after tween.js updates 'coords'.
-            // Move 'box' to the position described by 'coords' with a CSS translation.
             elem.style.setProperty('transform', `translate(${coords.x}px, ${coords.y}px)`)
+        })
+        .start()
+    
+    //animate expanding circle
+    var spawnLocation = document.querySelector(".spawnCircle")
+    spawnLocation.innerHTML = "<svg height='700' width='700' class='svg'> <circle class='circle' cx='200' cy='200' r='10' stroke='gray' stroke-width='2' fill='green'/> </svg>"
+    const circle = document.querySelector(".circle")
+    var radius = {r : circle.getAttribute("r")}
+    const tween2 = new TWEEN.Tween(radius)
+        .to({r:200}, 1000)
+        .easing(TWEEN.Easing.Quadratic.Out)
+        .onUpdate(() => {
+            circle.setAttribute("r", radius.r)
         })
         .start()
 }
@@ -54,6 +66,19 @@ $(document).ready(function() {
         console.log("focusing " + idClicked)
         focus(document.getElementById(idClicked))
     });
+
+    $('circle.circle').click(function(){
+        const circle = document.querySelector(".circle")
+        var radius = {r : circle.getAttribute("r")}
+        const tween = new TWEEN.Tween(radius)
+            .to({r:200}, 1000)
+            .easing(TWEEN.Easing.Quadratic.Out)
+            .onUpdate(() => {
+                circle.setAttribute("r", radius.r)
+            })
+            .start()
+
+    })
 });
 
 
