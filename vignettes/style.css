@@ -2,6 +2,7 @@
     text-align: center;
     padding: 20px;
     height: 35vh !important;
+    z-index: 100;
 }
 
 .title {
@@ -16,6 +17,7 @@
     background-size: cover;
     background-position-y: center;
     background-position-x: -10px;
+    height: 50px
 }
 
 #yifang {
@@ -36,7 +38,16 @@
 }
 
 .svg {
-    top: -30vh;
-    left: 50vh;
     position: relative;
+}
+
+.expand {
+    transform-origin: 50% 50%;
+    animation: scale 2000ms ease-in-out forwards;
+}
+
+@keyframes scale {
+    to {
+      transform: scale(2);
+    }
 }
