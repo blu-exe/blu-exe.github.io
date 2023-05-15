@@ -1,0 +1,13 @@
+.winNum {
+    position: absolute;
+    margin: 10px;
+
+}
+
+.operand {
+    position: absolute;
+}
+
+#playerAWinNum {
+    transform: scale(-1, -1);
+}
