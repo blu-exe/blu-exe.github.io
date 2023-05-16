@@ -13,7 +13,31 @@
         rgba(255,255,255,0) 85%, 
         rgba(212,67,67,0.58) 100%
     );
+
+    background-size: 200% 200%;
+
 }
+
+.bg-animate {
+    animation: Animation 1.5s ease;
+    animation-fill-mode: forwards;
+}
+
+.bg-reverse-animate {
+    animation: ReverseAnimation 1.5s ease;
+    animation-fill-mode: forwards;
+}
+
+@keyframes Animation {
+    0%{background-position:10% 0%}
+    100%{background-position:91% 100%}
+}
+
+@keyframes ReverseAnimation {
+    0%{background-position:91% 100%}
+    100%{background-position:10% 0%}
+}
+
 
 .main-container {
     display: flex;
