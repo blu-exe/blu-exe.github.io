@@ -26,78 +26,50 @@
 
 
 <body>
+    <div class="bg">
 
-    <div class="jumbotron-fluid winNum" id="playerAWinNum">12</div>
-    <div class="jumbotron-fluid winNum" id="playerBWinNum">24</div>
+        <div class="jumbotron-fluid winNum" id="playerAWinNum">12</div>
+        <div class="jumbotron-fluid winNum" id="playerBWinNum">24</div>
 
-    <div class="playerTable playerATable table">
-        <div class="row">
-            <div class="col opSelectA" id="mul">×</div>
-            <div class="col opSelectA" id="add">+</div>
-            <div class="col opSelectA" id="sub">-</div>
-            <div class="col opSelectA" id="div">÷</div>
+        <div class="playerTable playerATable table">
+            <div class="row">
+                <div class="col opSelectA" id="mul">×</div>
+                <div class="col opSelectA" id="add">+</div>
+                <div class="col opSelectA" id="sub">-</div>
+                <div class="col opSelectA" id="div">÷</div>
+            </div>
         </div>
+
+        <div class="playerTable playerBTable table">
+            <div class="row">
+                <div class="col opSelectB" id="mul">×</div>
+                <div class="col opSelectB" id="add">+</div>
+                <div class="col opSelectB" id="sub">-</div>
+                <div class="col opSelectB" id="div">÷</div>
+            </div>
+        </div>
+
+        <div class="container main-container">
+            <div class="table">
+                <div class="row">
+                    <div class="data" id="result">12</div>
+                </div>
+                <div class="row">
+                    <div class="data" id="equals">=</div>
+                </div>
+                <div class="row">
+                    <div class="data" id="operand2">4</div>
+                </div>
+                <div class="row">
+                    <div class="data" id="operation">×</div>
+                </div>
+                <div class="row">
+                    <div class="data" id="operand1">3</div>
+                </div>
+            </div>
+        </div> 
+
     </div>
-
-    <div class="playerTable playerBTable table">
-        <div class="row">
-            <div class="col opSelectB" id="mul">×</div>
-            <div class="col opSelectB" id="add">+</div>
-            <div class="col opSelectB" id="sub">-</div>
-            <div class="col opSelectB" id="div">÷</div>
-        </div>
-    </div>
-
-    <div class="container main-container">
-        <div class="table">
-            <div class="row">
-                <div class="data" id="result">12</div>
-            </div>
-            <div class="row">
-                <div class="data" id="equals">=</div>
-            </div>
-            <div class="row">
-                <div class="data" id="operand2">4</div>
-            </div>
-            <!-- <div class="row">
-                <div class="col data operation" id="mul">×</div>
-                <div class="col data operation" id="add">+</div>
-                <div class="col data operation" id="sub">-</div>
-                <div class="col data operation" id="div">÷</div>
-            </div> -->
-            <div class="row">
-                <div class="data" id="operation">×</div>
-            </div>
-            <div class="row">
-                <div class="data" id="operand1">3</div>
-            </div>
-        </div>
-    </div>
-
-<!-- 
-    <div class="doors">
-        <div class="door" id="door">
-        <div class="boxes">
-        </div>
-        </div>
-    
-        <div class="door">
-        <div class="boxes">
-        </div>
-        </div>
-    
-        <div class="door">
-        <div class="boxes">
-        </div>
-        </div>
-    </div>
-    
-    <div class="buttons">
-        <button id="spinner">Play</button>
-        <button id="reseter">Reset</button>
-    </div> -->
-    
-    
 </body>
 
 <script>

@@ -10,9 +10,13 @@ const operand2 = document.querySelector("#operand2");
 
 let state = {
     playerATurn: true,
+    operand1: 1,
+    operand2: 2,
+    result: 2,
     opSelectA: undefined,
     opSelectB: undefined
 }
+
 
 let strToOpStr = {
     'add': '+',
@@ -21,6 +25,62 @@ let strToOpStr = {
     'div': '÷'
 }
 
+// Setup event listeners
+$(".playerATable").click((e) => {
+    if (!state.playerATurn) {return;}
+    if (e.target.id) {
+        state.opSelectA = e.target.id; 
+        console.log(state);
+    }
+    update();
+});
+$(".playerBTable").click((e) => {
+    if (state.playerATurn) {return;}
+    if (e.target.id) {
+        state.opSelectB = e.target.id; 
+        console.log(state);
+    }
+    update();
+});
+
+
+// Per-turn updates
+function setTurnIndicator() {
+    if (state.playerATurn) {
+        $(".bg").css("background", "linear-gradient(0deg, rgba(91,142,224,0.578890931372549) 0%, rgba(255,255,255,0) 15%)");
+    } else {
+        $(".bg").css("background", "linear-gradient(0deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0) 85%, rgba(212,67,67,0.58) 100%)");
+    }
+}
+function op(r1, r2, op) {
+    if (op === "add") {
+        return r1 + r2;
+    } else if (op === "sub") {
+        return r1 - r2;
+    } else if (op === "mul") {
+        return r1 * r2;
+    } else if (op === "div") {
+        return r1 / r2;
+    }
+    throw new Error(`op() with invalid op ${op}`);
+}
+
+function update() {
+    if (state.playerATurn) {
+        $("#operation").text(strToOpStr[state.opSelectA]);
+        $("#result").text(op(state.operand1, state.operand2, state.opSelectA));
+
+    } else {
+        $("#operation").text(strToOpStr[state.opSelectB]);
+        $("#result").text(op(state.operand1, state.operand2, state.opSelectB));
+
+    }
+    setTurnIndicator();
+    state.playerATurn = !state.playerATurn;
+}
+
+
+// Game inits
 function guiGameStart() {
     for (var i = 0; i < winNum.length; ++i) {
         winNum[i].style.fontSize = "24pt";
@@ -54,114 +114,13 @@ function guiGameStart() {
         "fontSize": "40pt",
         "transform": "rotate(-90deg)"
     });
+
+    $("#operand1").text(state.operand1);
+    $("#operand2").text(state.operand2);
 }
 
-function setupGameStart() {
-    $(".playerATable").click((e) => {
-        if (e.target.id) {
-            state.opSelectA = e.target.id; 
-            console.log(state);
-        }
-        update();
-    });
-    $(".playerBTable").click((e) => {
-        if (e.target.id) {
-            state.opSelectB = e.target.id; 
-            console.log(state);
-        }
-        update();
-    });
-}
-
-function update() {
-    if (state.playerATurn) {
-        console.log("changing");
-        $("#operation").text(strToOpStr[state.opSelectA]);
-    } else {
-        console.log("changing");
-
-        $("#operation").text(strToOpStr[state.opSelectB]);
-    }
-    state.playerATurn = !state.playerATurn;
-}
 
 $(document).ready(() => {
-
     guiGameStart();
-    setupGameStart();
-    // init();
+    // initAnimation();
 });
-
-
-// const doors = document.querySelectorAll('.door');
-// const door = document.querySelector('#door');
-
-// document.querySelector('#spinner').addEventListener('click', spin);
-// document.querySelector('#reseter').addEventListener('click', init);
-
-// function init(firstInit = true, duration = 1) {
-//     for (const door of doors) {
-//         if (firstInit) {
-//             door.dataset.spinned = '0';
-//         } else if (door.dataset.spinned === '1') {
-//             return;
-//         }
-
-//         const boxes = door.querySelector('.boxes');
-//         const boxesClone = boxes.cloneNode(false);
-//         const pool = [
-//             '×',
-//             '+',
-//             '-',
-//             '÷'
-//         ];
-
-//         if (!firstInit) {
-
-//             boxesClone.addEventListener(
-//                 'transitionstart',
-//                 function () {
-//                     door.dataset.spinned = '1';
-//                     this.querySelectorAll('.box').forEach((box) => {
-//                         box.style.filter = 'blur(1px)';
-//                     });
-//                 },
-//                 { once: true }
-//             );
-
-//             boxesClone.addEventListener(
-//                 'transitionend',
-//                 function () {
-//                     this.querySelectorAll('.box').forEach((box, index) => {
-//                         box.style.filter = 'blur(0)';
-//                         if (index > 0) this.removeChild(box);
-//                     });
-//                 },
-//                 { once: true }
-//             );
-//         }
-
-//         for (let i = pool.length - 1; i >= 0; i--) {
-//             const box = document.createElement('div');
-//             box.classList.add('box');
-//             box.style.width = door.clientWidth + 'px';
-//             box.style.height = door.clientHeight + 'px';
-//             box.textContent = pool[i];
-//             boxesClone.appendChild(box);
-//         }
-//         boxesClone.style.transitionDuration = `${duration > 0 ? duration : 1}s`;
-//         boxesClone.style.transform = `translateY(-${door.clientHeight * (pool.length - 1)}px)`;
-//         door.replaceChild(boxesClone, boxes);
-//     }
-// }
-
-// async function spin() {
-//     init(false, 2);
-
-//     for (const door of doors) {
-//         const boxes = door.querySelector('.boxes');
-//         // const duration = parseInt(boxes.style.transitionDuration);
-//         boxes.style.transform = 'translateY(0)';
-//         // await new Promise((resolve) => setTimeout(resolve, duration * 100));
-//     }
-// }
