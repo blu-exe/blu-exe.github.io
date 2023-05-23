@@ -6,13 +6,11 @@
 
 .bg {
     height: 100vh;
-    background: linear-gradient(
-        0deg, 
-        rgba(91,142,224,0.578890931372549) 0%, 
-        rgba(255,255,255,0) 15%, 
-        rgba(255,255,255,0) 85%, 
-        rgba(212,67,67,0.58) 100%
-    );
+    background: linear-gradient(0deg,
+            rgba(91, 142, 224, 0.578890931372549) 0%,
+            rgba(255, 255, 255, 0) 15%,
+            rgba(255, 255, 255, 0) 85%,
+            rgba(212, 67, 67, 0.58) 100%);
 
     background-size: 200% 200%;
 
@@ -29,13 +27,23 @@
 }
 
 @keyframes Animation {
-    0%{background-position:10% 0%}
-    100%{background-position:91% 100%}
+    0% {
+        background-position: 10% 0%
+    }
+
+    100% {
+        background-position: 91% 100%
+    }
 }
 
 @keyframes ReverseAnimation {
-    0%{background-position:91% 100%}
-    100%{background-position:10% 0%}
+    0% {
+        background-position: 91% 100%
+    }
+
+    100% {
+        background-position: 10% 0%
+    }
 }
 
 
@@ -71,5 +79,61 @@
     position: absolute;
 }
 
+.row-animate {
+    display: block;
+    position: absolute;
 
+    animation: RowAnimation 1.5s ease-in;
+    animation-fill-mode: forwards;
+}
 
+@keyframes RowAnimation {
+    0% {
+        transform: translateX(0%);
+    }
+
+    100% {
+        transform: translateX(20%);
+    }
+}
+
+.health-bar {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    /* width: 200px; */
+    width: 77vw;
+    height: 20px;
+    padding: 5px;
+    background: #ddd;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    position: relative;
+}
+
+#barA {
+    background: #c54;
+}
+#barB {
+    background: rgb(68, 134, 204);
+}
+.bar {
+    /* background: #c54; */
+    width: 100%;
+    height: 10px;
+    position: relative;
+
+    transition: width .5s linear;
+}
+
+.hit {
+    background: rgba(255, 255, 255, 0.6);
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 0px;
+
+    transition: width .5s linear;
+}
