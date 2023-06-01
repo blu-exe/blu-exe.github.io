@@ -22,8 +22,9 @@ const invisibleCharacter = "‎";
 
 // PID
 const numOp2 = 5;
-const maxNumOp2 = 10;
+const maxNumOp2 = 24;
 const maxPlayerWinNum = 50;
+const maxNumInPlay = 50;
 let state = {
     winState: false,
     playerATurn: true,
@@ -40,6 +41,24 @@ let state = {
 
     op2List: []
 }
+function resetState() {
+    state = {
+        winState: false,
+        playerATurn: true,
+        turnNum: 1,
+        opSelectA: "add",
+        opSelectB: "add",
+        
+        operation: "add",
+        operand1: 1,
+        operand2: 2,
+        result: undefined,
+        playerAWinNum: undefined,
+        playerBWinNum: undefined,
+    
+        op2List: []
+    }
+}
 let strToOpStr = {
     'add': '+',
     'sub': '−',
@@ -49,8 +68,11 @@ let strToOpStr = {
 
 
 
+
+
 // Setup event listeners
 $(".playerATable").click((e) => {
+    console.log("A");
     console.log(state);
     if (!state.playerATurn) {return;}
     if (state.winState) {return;}
@@ -60,6 +82,7 @@ $(".playerATable").click((e) => {
     update();
 });
 $(".playerBTable").click((e) => {
+    console.log("B");
     console.log(state);
     if (state.playerATurn) {return;}
     if (state.winState) {return;}
@@ -67,6 +90,12 @@ $(".playerBTable").click((e) => {
         state.opSelectB = e.target.id; 
     }
     update();
+});
+$("#resetButton").click(() => { 
+    $("#resetButton").hide();
+    resetState();
+    funcGameStart();
+    guiGameStart();
 });
 
 function hitASuccess(HPamount){
@@ -96,7 +125,6 @@ function hitASuccess(HPamount){
         alert("DEAD");
     }
 }
-
 function hitBSuccess(HPamount){
     var total = hBarB.data('total'),
         value = hBarB.data('value');
@@ -120,13 +148,16 @@ function hitBSuccess(HPamount){
     if(value < 0){
         alert("DEAD");
     }
-};
+}
+
+
 
 
 
 // Game inits
 function getRandomInt(min, max) {
-    return Math.floor(Math.random() * (max - min) ) + min;
+    return Math.floor(Math.abs( (Math.random() - Math.random()) * (max - min) )) + min;
+
 }
 function guiGameStart() {
     for (var i = 0; i < winNum.length; ++i) {
@@ -170,7 +201,6 @@ function guiGameStart() {
         child.setAttribute("id", "operand2");
         child.innerHTML = state.op2List[index];
     }
-
     reformatDataID();
 
     $("#operand1").text(state.operand1);
@@ -194,50 +224,50 @@ function funcGameStart() {
     for (let index = 0; index < numOp2; index++) {
         state.op2List[index] = getRandomInt(1, maxNumOp2);
     }
-
     state.operand1 = 1;
     state.operand2 = state.op2List[Math.floor(numOp2 / 2)];
-
     state.playerAWinNum = getRandomInt(1, maxPlayerWinNum);
     state.playerBWinNum = getRandomInt(1, maxPlayerWinNum);
 }
-
-
-
-// Per-turn update helpers
-function op(r1, r2, op) {
-    // console.log ("op(" + r1 + " " + op + " " + r2 + ")");
-    if (op === "add") {
-        return r1 + r2;
-    } else if (op === "sub") {
-        return r1 - r2;
-    } else if (op === "mul") {
-        return r1 * r2;
-    } else if (op === "div") {
-        return Math.floor(r1 / r2);
-    }
-    throw new Error(`op() with invalid op ${op}`);
-}
-function reformatDataID() {
-    $(".data").css({
-        "fontSize": "40pt",
-        "text-align": "center",
-        "transform": "rotate(-90deg)"
-    });
-}
-function setTurnIndicator() {
-    if (state.playerATurn) {
-        if (state.turnNum > 2) {
-            $(".bg").removeClass("bg-reverse-animate");
-        }
-        $(".bg").addClass("bg-animate");
+let confirmClicked = false;
+$('#confirm').click(() => {
+    if (!confirmClicked) {
+        state.playerAWinNum = parseInt($("#winNumInput").val());
+        $(".overlay").css({
+            "transform": "scaleX(-1)"
+        }) 
     } else {
-        if (state.turnNum > 2) {
-            $(".bg").removeClass("bg-animate");
-        }
-        $(".bg").addClass("bg-reverse-animate");
+        state.playerBWinNum = parseInt($("#winNumInput").val());
     }
-}
+    console.log(state);
+    confirmClicked = true;
+});
+// async function guiRoundStart() {
+//     // make DOM overlay
+//     $('<div/>')
+//         .css({position: absolute,
+//               top: 0,
+//               width: 100,
+//               height: 100 
+//         })
+//         .addClass("overlay")
+//         .append("<span/>")
+//         .text("Enter your target number:")
+//         .append("<button/>")
+//     ;
+//     // await number entry player A
+//     // state.playerAWinNum = await 
+
+//     // swap overlay
+
+//     // await number entry player B
+
+//     // return promise
+// }
+
+
+
+// Win helpers
 function resolveAWin() {
     return new Promise(resolve => {
         hitBSuccess(state.playerAWinNum);
@@ -258,7 +288,16 @@ function resolveBWin() {
         }, 2000);
     });
 }
+async function animateWin(str) {
+    $("#table1").each(function() {
+        $("#table1").children().hide(); 
+    });
+    $("#equals").data(str);
+    $("#equals").show();
+    $("#resetButton").show();
+}
 async function checkForWin() {
+    // process damage
     if (state.result == state.playerAWinNum) {
         state.winState = true;
         const result = await resolveAWin();
@@ -267,6 +306,99 @@ async function checkForWin() {
         state.winState = true;
         const result = await resolveBWin();
         console.log(result);
+    } else {
+        return;
+    }
+
+    // if game over, celebrate win
+    if (hBarA.data('value') <= 0) {
+        // display win
+        animateWin("Player B wins!");
+        // reset winState
+        state.winState = false;
+        return;
+    } else if (hBarB.data('value') <= 0) {
+        animateWin("Player A wins!");
+        state.winState = false;
+        return;
+    }
+
+    // if round over, select new nums
+    $('#winModal').modal("show");
+}
+
+
+
+
+
+// Per-turn update helpers
+function op(r1, r2, op) {
+    // console.log ("op(" + r1 + " " + op + " " + r2 + ")");
+    if (op === "add") {
+        return r1 + r2;
+    } else if (op === "sub") {
+        return r1 - r2;
+    } else if (op === "mul") {
+        return r1 * r2;
+    } else if (op === "div") {
+        return Math.floor(r1 / r2);
+    }
+    throw new Error(`op() with invalid op ${op}`);
+}
+function reformatDataID() {
+    $(".data").css({
+        "fontSize": "12vw",
+        "text-align": "center",
+        "transform": "rotate(-90deg)",
+    });
+}
+function setTurnIndicator() {
+    if (state.playerATurn) {
+        if (state.turnNum > 2) {
+            $(".bg").removeClass("bg-reverse-animate");
+        }
+        $(".bg").addClass("bg-animate");
+    } else {
+        if (state.turnNum > 2) {
+            $(".bg").removeClass("bg-animate");
+        }
+        $(".bg").addClass("bg-reverse-animate");
+    }
+}
+function deactivateInvalidOps() {
+    let mul, add, sub, div;
+    if (state.playerATurn) {
+        mul = $(".mulA"),
+        add = $(".addA"),
+        sub = $(".subA"),
+        div = $(".divA");
+    } else {
+        mul = $(".mulB"),
+        add = $(".addB"),
+        sub = $(".subB"),
+        div = $(".divB");
+    }
+    add.show();
+    mul.show();
+    sub.show();
+    div.show();
+    console.log(op(state.operand1, state.operand2, "add"), op(state.operand1, state.operand2, "mul"), op(state.operand1, state.operand2, "div"), op(state.operand1, state.operand2, "sub"));
+    let addRes = op(state.operand1, state.operand2, "add");
+    let subRes = op(state.operand1, state.operand2, "sub");
+    let mulRes = op(state.operand1, state.operand2, "mul");
+    let divRes = op(state.operand1, state.operand2, "div");
+
+    if (addRes > maxNumInPlay && addRes > 0) {
+        add.hide();
+    } 
+    if (mulRes > maxNumInPlay && mulRes > 0) {
+        mul.hide();
+    } 
+    // if (divRes > maxNumInPlay && divRes > 0) {
+    //     div.hide();
+    // } 
+    if (subRes > maxNumInPlay && subRes < 0) {
+        sub.hide();
     }
 }
 function updateVars(s) {
@@ -294,7 +426,6 @@ function updateVars(s) {
 }
 function animateUpdate (olds, s) {
     // TODO: animate op2 state slide/shift, animate result moving to op1
-
     //animate operation change
     $("#operation").text(strToOpStr[s.operation]);
 
@@ -320,24 +451,11 @@ function animateUpdate (olds, s) {
         reformatDataID();
     }, 2000);
 
-    //animate op2 slide
-    // setTimeout(() => {
-    //     console.log("animating row2");
-    //     $("#op2row").addClass("row-animate");
-    //     $("#op2row").addClass("row-animate");
-    // }, 2000);
-    // setTimeout(() => {
-    //     console.log("unanimating row2");
-    //     $("#op2row").removeClass("row-animate");
-    // }, 4000);
-
-    //overlay new array
-
-    
-    //delete old row
-    //animate row slide
+    setTurnIndicator();
 }
 
+
+// sin city waasnt made for u
 
 
 // Per-turn update
@@ -345,15 +463,18 @@ function update() {
     let oldstate = state;
     updateVars(state);
     animateUpdate(oldstate, state);
-    setTurnIndicator();
     state.playerATurn = !state.playerATurn;
+    deactivateInvalidOps();
     state.turnNum++;
 }
 
 
 
+
+
 // Main
 $(document).ready(() => {
+    $("#resetButton").hide();
     // initMainMenu();
     funcGameStart();
     guiGameStart();

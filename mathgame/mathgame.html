@@ -17,6 +17,7 @@
     <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <link href='https://fonts.googleapis.com/css?family=Droid Sans Mono' rel='stylesheet'>
     <script type="module" src="./mainmenu.js"></script>
     <script type="module" src="./main.js"></script>
 
@@ -27,6 +28,37 @@
 
 
 <body>
+    <div class="overlay">
+        <div class="row">
+            <div class="jumbotron">Enter your number:</div>
+        </div>
+        <div class="row">
+            <input class="form-control form-control-lg" type="text" id="winNumInput" placeholder="Your target #">
+        </div>
+        <div class="row">
+            <button type="button" class="btn btn-primary" id="confirm">Confirm</button>
+        </div>
+    </div>
+    <div class="modal fade" id="winModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              ...
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
     <div class="bg">
 
         <div class="jumbotron-fluid winNum" id="playerAWinNum">12</div>
@@ -34,29 +66,29 @@
 
         <div class="playerTable playerATable table">
             <div class="row"> 
-                <div class="health-bar" id="hbarA" data-total="100" data-value="100">
+                <div class="health-bar" id="hbarA" data-total="50" data-value="50">
                     <div class="bar" id="barA">
                         <div class="hit"></div>
                     </div>
                 </div>
             </div>
-            <div class="row" id="opSelectBRow">
-                <div class="col opSelectA" id="mul">×</div>
-                <div class="col opSelectA" id="add">+</div>
-                <div class="col opSelectA" id="sub">-</div>
-                <div class="col opSelectA" id="div">÷</div>
+            <div class="row" id="opSelectARow">
+                <div class="col opSelectA mulA" id="mul">×</div>
+                <div class="col opSelectA addA" id="add">+</div>
+                <div class="col opSelectA subA" id="sub">-</div>
+                <div class="col opSelectA divA" id="div">÷</div>
             </div>
         </div>
 
         <div class="playerTable playerBTable table">
             <div class="row" id="opSelectBRow">
-                <div class="col opSelectB" id="mul">×</div>
-                <div class="col opSelectB" id="add">+</div>
-                <div class="col opSelectB" id="sub">-</div>
-                <div class="col opSelectB" id="div">÷</div>
+                <div class="col opSelectB mulB" id="mul">×</div>
+                <div class="col opSelectB addB" id="add">+</div>
+                <div class="col opSelectB subB" id="sub">-</div>
+                <div class="col opSelectB divB" id="div">÷</div>
             </div>
             <div class="row"> 
-                <div class="health-bar" id="hbarB" data-total="100" data-value="100">
+                <div class="health-bar" id="hbarB" data-total="50" data-value="50">
                     <div class="bar" id="barB">
                         <div class="hit"></div>
                     </div>
@@ -65,7 +97,7 @@
         </div>
 
         <div class="container main-container">
-            <div class="table">
+            <div class="table" id="table1">
                 <div class="row">
                     <div class="data" id="result"></div>
                 </div>
@@ -84,15 +116,11 @@
                     <div class="data" id="operand1"></div>
                 </div>
             </div>
+            <button type="button" class="btn btn-primary btn-lg" id="resetButton">Reset</button>
+
         </div> 
 
     </div>
 </body>
-
-<script>
-$.get("../persistent.html", function(data){
-    $("#navbar-core").replaceWith(data);
-});
-</script>
 
 </html>
