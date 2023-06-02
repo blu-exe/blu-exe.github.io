@@ -26,6 +26,7 @@ const maxNumOp2 = 24;
 const maxPlayerWinNum = 50;
 const maxNumInPlay = 50;
 let state = {
+    roundWinState: false,
     winState: false,
     playerATurn: true,
     turnNum: 1,
@@ -75,7 +76,7 @@ $(".playerATable").click((e) => {
     console.log("A");
     console.log(state);
     if (!state.playerATurn) {return;}
-    if (state.winState) {return;}
+    if (state.winState || state.roundWinState) {return;}
     if (e.target.id) {
         state.opSelectA = e.target.id; 
     }
@@ -85,7 +86,7 @@ $(".playerBTable").click((e) => {
     console.log("B");
     console.log(state);
     if (state.playerATurn) {return;}
-    if (state.winState) {return;}
+    if (state.winState || state.roundWinState) {return;}
     if (e.target.id) {
         state.opSelectB = e.target.id; 
     }
@@ -188,6 +189,7 @@ function guiGameStart() {
         "width": (viewportWidth - 90) + "px"
     });
 
+    console.log(state.playerAWinNum, state.playerBWinNum);
     $("#playerAWinNum").text(state.playerAWinNum);
     $("#playerBWinNum").text(state.playerBWinNum);
 
@@ -220,50 +222,18 @@ function guiGameStart() {
     barB.css('width', '100%');
     console.log("resetting health to 100");
 }
-function funcGameStart() {
+async function funcGameStart() {
     for (let index = 0; index < numOp2; index++) {
         state.op2List[index] = getRandomInt(1, maxNumOp2);
     }
     state.operand1 = 1;
     state.operand2 = state.op2List[Math.floor(numOp2 / 2)];
-    state.playerAWinNum = getRandomInt(1, maxPlayerWinNum);
-    state.playerBWinNum = getRandomInt(1, maxPlayerWinNum);
-}
-let confirmClicked = false;
-$('#confirm').click(() => {
-    if (!confirmClicked) {
-        state.playerAWinNum = parseInt($("#winNumInput").val());
-        $(".overlay").css({
-            "transform": "scaleX(-1)"
-        }) 
-    } else {
-        state.playerBWinNum = parseInt($("#winNumInput").val());
+    console.log("here in func game start");
+    if (state.playerAWinNum == undefined || !Number.isInteger(state.playerAWinNum)  || !Number.isInteger(state.playerBWinNum)) {
+        state.playerAWinNum = getRandomInt(1, maxPlayerWinNum);
+        state.playerBWinNum = getRandomInt(1, maxPlayerWinNum);
     }
-    console.log(state);
-    confirmClicked = true;
-});
-// async function guiRoundStart() {
-//     // make DOM overlay
-//     $('<div/>')
-//         .css({position: absolute,
-//               top: 0,
-//               width: 100,
-//               height: 100 
-//         })
-//         .addClass("overlay")
-//         .append("<span/>")
-//         .text("Enter your target number:")
-//         .append("<button/>")
-//     ;
-//     // await number entry player A
-//     // state.playerAWinNum = await 
-
-//     // swap overlay
-
-//     // await number entry player B
-
-//     // return promise
-// }
+}
 
 
 
@@ -272,9 +242,9 @@ function resolveAWin() {
     return new Promise(resolve => {
         hitBSuccess(state.playerAWinNum);
         setTimeout(() => {
-            resolve('resolved A');
             //TODO: create modal
             window.alert("Player A (Red) wins the round!");
+            resolve('resolved A');
         }, 2000);
     });
 }
@@ -282,9 +252,9 @@ function resolveBWin() {
     return new Promise(resolve => {
         hitASuccess(state.playerBWinNum);
         setTimeout(() => {
-            resolve('resolved B');
             //TODO: create modal
             window.alert("Player B (Blue) wins the round!");
+            resolve('resolved B');
         }, 2000);
     });
 }
@@ -299,11 +269,11 @@ async function animateWin(str) {
 async function checkForWin() {
     // process damage
     if (state.result == state.playerAWinNum) {
-        state.winState = true;
+        state.roundWinState = true;
         const result = await resolveAWin();
         console.log(result);
     } else if (state.result == state.playerBWinNum) {
-        state.winState = true;
+        state.roundWinState = true;
         const result = await resolveBWin();
         console.log(result);
     } else {
@@ -324,7 +294,8 @@ async function checkForWin() {
     }
 
     // if round over, select new nums
-    $('#winModal').modal("show");
+    $(".overlay").show();
+    // $('#winModal').modal("show");
 }
 
 
@@ -473,9 +444,68 @@ function update() {
 
 
 // Main
-$(document).ready(() => {
-    $("#resetButton").hide();
-    // initMainMenu();
+let timesClicked = 0;
+$('#confirm').click(() => {
+    let value = parseInt($("#winNumInput").val()); 
+    if (value > maxNumInPlay / 2 || value < (-1 *maxNumInPlay / 2) || value === state.playerAWinNum) {
+        return;
+    }
+    if (timesClicked === 0) {
+        state.playerAWinNum = value;
+        $(".overlay").css({
+            "transform": "scale(-1, -1)"
+        }) 
+    } else if (timesClicked === 1) {
+        state.playerBWinNum = value;
+        $(".overlay").hide();
+        timesClicked = -1;
+        if (state.roundWinState) {
+            roundStart();
+            state.roundWinState = false;
+        } else {
+            gameStart();
+        }
+    } else {
+        alert("RAPH IS BAD");
+    }
+    console.log(state);
+    timesClicked++;
+});
+function gameStart() {
     funcGameStart();
     guiGameStart();
+}
+function roundStart() {
+    for (let index = 0; index < numOp2; index++) {
+        state.op2List[index] = getRandomInt(1, maxNumOp2);
+    }
+    state.operand1 = 1;
+    state.operand2 = state.op2List[Math.floor(numOp2 / 2)];
+
+
+    $("#playerAWinNum").text(state.playerAWinNum);
+    $("#playerBWinNum").text(state.playerBWinNum);
+
+    // transforms and ops, keep at end
+    let op2ListLen = (state.op2List.length < numOp2) ? (state.op2List.length + 1) : state.op2List.length;
+    for (let index = 0; index < op2ListLen; index++) {
+        console.log("appending child " + state.op2List[index]);
+        let child = document.querySelector("#op2row").appendChild(document.createElement("div"));
+        child.classList.add("data");
+        child.classList.add("col");
+        child.setAttribute("id", "operand2");
+        child.innerHTML = state.op2List[index];
+    }
+    reformatDataID();
+
+    $("#operand1").text(state.operand1);
+    if (state.result == undefined) {
+        $("#result").text(invisibleCharacter);
+    } else {
+        $("#result").text(state.result);
+    }
+    $("#operation").text(strToOpStr[state.operation]);
+}
+$(document).ready(() => {
+    $("#resetButton").hide();
 });
