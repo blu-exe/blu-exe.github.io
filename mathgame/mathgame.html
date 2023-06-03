@@ -18,7 +18,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
     <link href='https://fonts.googleapis.com/css?family=Droid Sans Mono' rel='stylesheet'>
-    <script type="module" src="./mainmenu.js"></script>
+    <link href="https://fonts.cdnfonts.com/css/army-rust" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/fireworks-js@2.x/dist/index.umd.js"></script>
     <script type="module" src="./main.js"></script>
 
     <title>Untitled Math Game</title>
@@ -28,45 +29,45 @@
 
 
 <body>
-    <div class="overlay">
-        <div class="row">
-            <div class="jumbotron">Enter your number:</div>
-        </div>
-        <div class="row">
-            <input class="form-control form-control-lg" type="text" id="winNumInput" placeholder="Your target # (-25 to 25)">
-        </div>
-        <div class="row">
-            <button type="button" class="btn btn-primary" id="confirm">Confirm</button>
+    <img src="img/output-onlinepngtools (2).png" class="playerAWeapon floatingA" id="sword1A">
+    <img src="img/output-onlinepngtools (1).png" class="playerBWeapon floatingB" id="sword1B">
+    <div class="mainmenu">
+        <div class="table">
+            <div class="row">
+                <h1 class="title1">Operation:</h1>
+            </div>
+            <div class="row">
+                <div class="title2">Operation</div>
+            </div>
+            <div class="row">
+                <button type="button" id="start" class="btn btn-primary btn-lg">Start Game</button>
+            </div>
+            <div class="row">
+                <button type="button" id="rules" class="btn btn-secondary btn-lg">Rules</button>
+            </div>
         </div>
     </div>
-    <div class="modal fade" id="winModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
+    <div class="overlay">
+        <div class="container-fluid overlayContainer">
+            <div class="row">
+                <div class="jumbotron-fluid">Enter your target number:</div>
             </div>
-            <div class="modal-body">
-              ...
+            <div class="row">
+                <input class="form-control form-control-lg" type="text" id="winNumInput" placeholder="Your target # (-25 to 25)">
             </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary">Save changes</button>
+            <div class="row">
+                <button type="button" class="btn btn-primary" id="confirm">Confirm</button>
             </div>
-          </div>
         </div>
-      </div>
+    </div>
 
-    <div class="bg">
-
+    <div class="bg fireworks">
         <div class="jumbotron-fluid winNum" id="playerAWinNum">12</div>
         <div class="jumbotron-fluid winNum" id="playerBWinNum">24</div>
 
         <div class="playerTable playerATable table">
             <div class="row"> 
-                <div class="health-bar" id="hbarA" data-total="50" data-value="50">
+                <div class="health-bar" id="hbarA" data-total="1" data-value="1">
                     <div class="bar" id="barA">
                         <div class="hit"></div>
                     </div>
@@ -88,7 +89,7 @@
                 <div class="col opSelectB divB" id="div">÷</div>
             </div>
             <div class="row"> 
-                <div class="health-bar" id="hbarB" data-total="50" data-value="50">
+                <div class="health-bar" id="hbarB" data-total="1" data-value="1">
                     <div class="bar" id="barB">
                         <div class="hit"></div>
                     </div>
@@ -101,8 +102,8 @@
                 <div class="row">
                     <div class="data" id="result"></div>
                 </div>
-                <div class="row">
-                    <div class="data" id="equals">=</div>
+                <div class="row" id="winRow">
+                    <div class="data equals">=</div>
                 </div>
                 <div id="rowAnimator">
                 <div class="row" id="op2row">
@@ -122,5 +123,10 @@
 
     </div>
 </body>
+
+<script>
+    const container = document.querySelector('.fireworks');
+    const fireworks = new Fireworks.default(container);
+</script>
 
 </html>

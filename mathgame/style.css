@@ -1,10 +1,190 @@
 body {
     font-family: Droid Sans Mono;
 }
+
 .winNum {
     position: absolute;
     margin: 10px;
 
+}
+
+.mainmenu {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    background: linear-gradient(0deg,
+            rgba(91, 142, 224, 1) 0%,
+            #ddd 20%,
+            #ddd 80%,
+            rgba(212, 67, 67, 1) 100%);
+    display: flex;
+    flex-direction: row;
+    flex-basis: auto;
+    text-align: center;
+    z-index: 10000;
+    align-items: center;
+}
+
+.title1 {
+    font-family: 'ARMY RUST', sans-serif;
+    font-size: 14vw;
+}
+
+.title2 {
+    margin-top: -30px;
+    font-weight: bold;
+    font-style: italic;
+    font-size: 16vw;
+    margin-bottom: 20px;
+}
+
+#resetButton {
+    z-index: 100;
+}
+
+#rules {
+    margin-top: 20px;
+}
+
+.winMsg {
+    position: absolute;
+    top: 40%;
+    left: 20%;
+    text-align: center;
+    font-size: 10vw;
+    transform: rotate(90deg);
+}
+
+.swingB {
+    animation-name: swingB;
+    animation-duration: 1.5s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+}
+
+@keyframes swingB {
+    0% {
+        transform: translate(0, 0px) rotate(15deg);
+    }
+
+    50% {
+        transform: translate(0, -350px) rotate(20deg);
+    }
+
+    60% {
+        transform: translate(20px, -350px) rotate(40deg);
+        filter: blur(0px);
+    }
+
+    65% {
+        transform: translate(-200px, -400px) rotate(-40deg);
+        filter: blur(2px);
+    }
+
+    100% {
+        transform: translate(0, 0px) rotate(15deg);
+        filter: blur(0px);
+    }
+}
+
+.swingA {
+    animation-name: swingA;
+    animation-duration: 1.5s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+}
+
+@keyframes swingA {
+    0% {
+        transform: translate(0, 0px) rotate(195deg);
+    }
+
+    50% {
+        transform: translate(0, 350px) rotate(200deg);
+    }
+
+    60% {
+        transform: translate(-20px, 350px) rotate(220deg);
+        filter: blur(0px);
+    }
+
+    65% {
+        transform: translate(200px, 400px) rotate(160deg);
+        filter: blur(2px);
+    }
+
+    100% {
+        transform: translate(0, 0px) rotate(195deg);
+        filter: blur(0px);
+    }
+}
+
+.floatingB {
+    animation-name: floatingB;
+    animation-duration: 3s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+}
+
+@keyframes floatingB {
+    0% {
+        transform: translate(0, 0px) rotate(15deg);
+    }
+
+    50% {
+        transform: translate(0, 15px) rotate(18deg);
+    }
+
+    100% {
+        transform: translate(0, -0px) rotate(15deg);
+    }
+}
+
+.floatingA {
+    animation-name: floatingA;
+    animation-duration: 3s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+}
+
+@keyframes floatingA {
+    0% {
+        transform: translate(0, 0px) rotate(195deg);
+    }
+
+    50% {
+        transform: translate(0, 15px) rotate(192deg);
+    }
+
+    100% {
+        transform: translate(0, -0px) rotate(195deg);
+    }
+}
+
+.playerBWeapon {
+    position: absolute;
+    bottom: 18vh;
+    right: 10vw;
+}
+
+.playerAWeapon {
+    position: absolute;
+    top: 18vh;
+    left: 10vw;
+}
+
+#sword1A {
+    width: 15%;
+    height: 22%;
+}
+
+#sword1B {
+    width: 15%;
+    height: 22%;
+}
+
+.overlayContainer {
+    margin-top: 30vh;
 }
 
 .overlay {
@@ -14,7 +194,11 @@ body {
     width: 100%;
     height: 100%;
     z-index: 10;
-    background-color: antiquewhite;
+    background: linear-gradient(0deg,
+            rgba(91, 142, 224, 1) 0%,
+            rgba(255, 255, 255, 1) 20%,
+            rgba(255, 255, 255, 1) 80%,
+            rgba(212, 67, 67, 1) 100%);
 }
 
 #winNumInput {
@@ -141,11 +325,13 @@ body {
 }
 
 #barA {
-    background: #c54;
+    background: rgb(204, 85, 68);
 }
+
 #barB {
     background: rgb(68, 134, 204);
 }
+
 .bar {
     /* background: #c54; */
     width: 100%;

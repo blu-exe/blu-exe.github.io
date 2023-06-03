@@ -1,5 +1,3 @@
-// import { initMainMenu } from "./mainmenu.js";
-
 // consts
 let viewportHeight = window.innerHeight;
 let viewportWidth = window.innerWidth;
@@ -22,7 +20,7 @@ const invisibleCharacter = "‎";
 
 // PID
 const numOp2 = 5;
-const maxNumOp2 = 24;
+const maxNumOp2 = 0;
 const maxPlayerWinNum = 50;
 const maxNumInPlay = 50;
 let state = {
@@ -62,7 +60,7 @@ function resetState() {
 }
 let strToOpStr = {
     'add': '+',
-    'sub': '−',
+    'sub': '−', 
     'mul': '×',
     'div': '÷'
 }
@@ -93,11 +91,45 @@ $(".playerBTable").click((e) => {
     update();
 });
 $("#resetButton").click(() => { 
+    // fireworks.stop();
     $("#resetButton").hide();
+    $(".winMsg").remove();
+    console.log("reset");
     resetState();
-    funcGameStart();
-    guiGameStart();
+    $(".overlay").show();
 });
+let timesClicked = 0;
+$('#confirm').click(() => {
+    let value = parseInt($("#winNumInput").val()); 
+    if (value > maxNumInPlay / 2 || value < (-1 *maxNumInPlay / 2) || value === state.playerAWinNum) {
+        return;
+    }
+    if (timesClicked === 0) {
+        state.playerAWinNum = value;
+        $(".overlayContainer").css({
+            "transform": "scale(-1, -1)"
+        }) 
+    } else if (timesClicked === 1) {
+        state.playerBWinNum = value;
+        $(".overlayContainer").css({
+            "transform": ""
+        }) 
+        $(".overlay").hide();
+        timesClicked = -1;          // this could not be implmented any worse
+        if (state.roundWinState) {
+            roundStart();
+            state.roundWinState = false;
+        } else {
+            gameStart();
+        }
+    } else {
+        alert("RAPH IS BAD");
+    }
+    console.log(state);
+    timesClicked++;
+});
+
+
 
 function hitASuccess(HPamount){
     var total = hBarA.data('total'),
@@ -157,8 +189,34 @@ function hitBSuccess(HPamount){
 
 // Game inits
 function getRandomInt(min, max) {
-    return Math.floor(Math.abs( (Math.random() - Math.random()) * (max - min) )) + min;
+    return Math.floor((Math.random() - Math.random()) * (max - min)) + min;
 
+}
+function guiRoundStart() {
+    console.log(state.playerAWinNum, state.playerBWinNum);
+    $("#playerAWinNum").text(state.playerAWinNum);
+    $("#playerBWinNum").text(state.playerBWinNum);
+
+    // transforms and ops, keep at end
+    $("#op2row").empty();
+    let op2ListLen = (state.op2List.length < numOp2) ? (state.op2List.length + 1) : state.op2List.length; // wtf
+    for (let index = 0; index < op2ListLen; index++) {
+        console.log("appending child " + state.op2List[index]);
+        let child = document.querySelector("#op2row").appendChild(document.createElement("div"));
+        child.classList.add("data");
+        child.classList.add("col");
+        child.setAttribute("id", "operand2");
+        child.innerHTML = state.op2List[index];
+    }
+    reformatDataID();
+
+    $("#operand1").text(state.operand1);
+    if (state.result == undefined) {
+        $("#result").text(invisibleCharacter);
+    } else {
+        $("#result").text(state.result);
+    }
+    $("#operation").text(strToOpStr[state.operation]);
 }
 function guiGameStart() {
     for (var i = 0; i < winNum.length; ++i) {
@@ -188,30 +246,11 @@ function guiGameStart() {
         right: 0,
         "width": (viewportWidth - 90) + "px"
     });
+    $("#table1").each(function() {
+        $("#table1").children().show(); 
+    });
 
-    console.log(state.playerAWinNum, state.playerBWinNum);
-    $("#playerAWinNum").text(state.playerAWinNum);
-    $("#playerBWinNum").text(state.playerBWinNum);
-
-    // transforms and ops, keep at end
-    let op2ListLen = (state.op2List.length < numOp2) ? (state.op2List.length + 1) : state.op2List.length;
-    for (let index = 0; index < op2ListLen; index++) {
-        console.log("appending child " + state.op2List[index]);
-        let child = document.querySelector("#op2row").appendChild(document.createElement("div"));
-        child.classList.add("data");
-        child.classList.add("col");
-        child.setAttribute("id", "operand2");
-        child.innerHTML = state.op2List[index];
-    }
-    reformatDataID();
-
-    $("#operand1").text(state.operand1);
-    if (state.result == undefined) {
-        $("#result").text(invisibleCharacter);
-    } else {
-        $("#result").text(state.result);
-    }
-    $("#operation").text(strToOpStr[state.operation]);
+    guiRoundStart();
 
     // hp bar
     hBarA.data('value', hBarA.data('total'));
@@ -222,7 +261,19 @@ function guiGameStart() {
     barB.css('width', '100%');
     console.log("resetting health to 100");
 }
-async function funcGameStart() {
+function funcRoundStart() {
+    state.op2List = [];
+    for (let index = 0; index < numOp2; index++) {
+        state.op2List[index] = getRandomInt(1, maxNumOp2);
+    }
+    state.operand1 = 1;
+    state.operand2 = state.op2List[Math.floor(numOp2 / 2)];
+    if (state.playerAWinNum == undefined || !Number.isInteger(state.playerAWinNum)  || !Number.isInteger(state.playerBWinNum)) {
+        state.playerAWinNum = getRandomInt(1, maxPlayerWinNum);
+        state.playerBWinNum = getRandomInt(1, maxPlayerWinNum);
+    }
+}
+function funcGameStart() {
     for (let index = 0; index < numOp2; index++) {
         state.op2List[index] = getRandomInt(1, maxNumOp2);
     }
@@ -239,31 +290,41 @@ async function funcGameStart() {
 
 // Win helpers
 function resolveAWin() {
+    $(".playerAWeapon").removeClass("floatingA");
+    $(".playerAWeapon").addClass("swingA");
     return new Promise(resolve => {
-        hitBSuccess(state.playerAWinNum);
         setTimeout(() => {
-            //TODO: create modal
-            window.alert("Player A (Red) wins the round!");
+            hitBSuccess(state.playerAWinNum);
+        }, 1000);
+        setTimeout(() => {
+            $(".playerAWeapon").removeClass("swingA");
+            $(".playerAWeapon").addClass("floatingA");
             resolve('resolved A');
-        }, 2000);
+        }, 1500);
     });
 }
 function resolveBWin() {
+    $(".playerBWeapon").removeClass("floatingB");
+    $(".playerBWeapon").addClass("swingB");
     return new Promise(resolve => {
-        hitASuccess(state.playerBWinNum);
         setTimeout(() => {
-            //TODO: create modal
-            window.alert("Player B (Blue) wins the round!");
+            hitASuccess(state.playerBWinNum);
+        }, 1000);
+        setTimeout(() => {
+            $(".playerBWeapon").removeClass("swingB");
+            $(".playerBWeapon").addClass("floatingB");
             resolve('resolved B');
-        }, 2000);
+        }, 1500);
     });
 }
 async function animateWin(str) {
     $("#table1").each(function() {
         $("#table1").children().hide(); 
     });
-    $("#equals").data(str);
-    $("#equals").show();
+    let winMsg = document.querySelector("body").appendChild(document.createElement("div"));
+    winMsg.classList.add("winMsg");
+    winMsg.innerHTML = str;
+    // fireworks.start();
     $("#resetButton").show();
 }
 async function checkForWin() {
@@ -283,16 +344,17 @@ async function checkForWin() {
     // if game over, celebrate win
     if (hBarA.data('value') <= 0) {
         // display win
-        animateWin("Player B wins!");
+        animateWin("Blue player wins!");
         // reset winState
         state.winState = false;
         return;
     } else if (hBarB.data('value') <= 0) {
-        animateWin("Player A wins!");
+        animateWin("Red player wins!");
         state.winState = false;
         return;
     }
 
+    console.log("showing overlay");
     // if round over, select new nums
     $(".overlay").show();
     // $('#winModal').modal("show");
@@ -365,9 +427,9 @@ function deactivateInvalidOps() {
     if (mulRes > maxNumInPlay && mulRes > 0) {
         mul.hide();
     } 
-    // if (divRes > maxNumInPlay && divRes > 0) {
-    //     div.hide();
-    // } 
+    if (state.operand2 == 0) {
+        div.hide();
+    } 
     if (subRes > maxNumInPlay && subRes < 0) {
         sub.hide();
     }
@@ -444,68 +506,19 @@ function update() {
 
 
 // Main
-let timesClicked = 0;
-$('#confirm').click(() => {
-    let value = parseInt($("#winNumInput").val()); 
-    if (value > maxNumInPlay / 2 || value < (-1 *maxNumInPlay / 2) || value === state.playerAWinNum) {
-        return;
-    }
-    if (timesClicked === 0) {
-        state.playerAWinNum = value;
-        $(".overlay").css({
-            "transform": "scale(-1, -1)"
-        }) 
-    } else if (timesClicked === 1) {
-        state.playerBWinNum = value;
-        $(".overlay").hide();
-        timesClicked = -1;
-        if (state.roundWinState) {
-            roundStart();
-            state.roundWinState = false;
-        } else {
-            gameStart();
-        }
-    } else {
-        alert("RAPH IS BAD");
-    }
-    console.log(state);
-    timesClicked++;
-});
 function gameStart() {
     funcGameStart();
     guiGameStart();
 }
 function roundStart() {
-    for (let index = 0; index < numOp2; index++) {
-        state.op2List[index] = getRandomInt(1, maxNumOp2);
-    }
-    state.operand1 = 1;
-    state.operand2 = state.op2List[Math.floor(numOp2 / 2)];
-
-
-    $("#playerAWinNum").text(state.playerAWinNum);
-    $("#playerBWinNum").text(state.playerBWinNum);
-
-    // transforms and ops, keep at end
-    let op2ListLen = (state.op2List.length < numOp2) ? (state.op2List.length + 1) : state.op2List.length;
-    for (let index = 0; index < op2ListLen; index++) {
-        console.log("appending child " + state.op2List[index]);
-        let child = document.querySelector("#op2row").appendChild(document.createElement("div"));
-        child.classList.add("data");
-        child.classList.add("col");
-        child.setAttribute("id", "operand2");
-        child.innerHTML = state.op2List[index];
-    }
-    reformatDataID();
-
-    $("#operand1").text(state.operand1);
-    if (state.result == undefined) {
-        $("#result").text(invisibleCharacter);
-    } else {
-        $("#result").text(state.result);
-    }
-    $("#operation").text(strToOpStr[state.operation]);
+    funcRoundStart();
+    guiRoundStart();
 }
+$("#start").click(() => { 
+    $(".mainmenu").hide();
+    $(".overlay").show();
+});
 $(document).ready(() => {
+    $(".overlay").hide();
     $("#resetButton").hide();
 });
