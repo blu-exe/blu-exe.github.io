@@ -444,7 +444,6 @@ function deactivateInvalidOps() {
     let addRes = op(state.operand1, state.operand2, "add");
     let subRes = op(state.operand1, state.operand2, "sub");
     let mulRes = op(state.operand1, state.operand2, "mul");
-    let divRes = op(state.operand1, state.operand2, "div");
 
     if (addRes > maxNumInPlay) {
         add.hide();
