@@ -20,7 +20,7 @@ const invisibleCharacter = "‎";
 
 // PID
 const numOp2 = 5;
-const maxNumOp2 = 0;
+const maxNumOp2 = 12;
 const maxPlayerWinNum = 50;
 const maxNumInPlay = 50;
 let state = {
@@ -101,7 +101,7 @@ $("#resetButton").click(() => {
 let timesClicked = 0;
 $('#confirm').click(() => {
     let value = parseInt($("#winNumInput").val()); 
-    if (value > maxNumInPlay / 2 || value < (-1 *maxNumInPlay / 2) || value === state.playerAWinNum) {
+    if (value > maxNumInPlay / 2 || value === state.playerAWinNum) {
         return;
     }
     if (timesClicked === 0) {
@@ -128,8 +128,6 @@ $('#confirm').click(() => {
     console.log(state);
     timesClicked++;
 });
-
-
 
 function hitASuccess(HPamount){
     var total = hBarA.data('total'),
@@ -186,11 +184,37 @@ function hitBSuccess(HPamount){
 
 
 
+// Rules pages
+let inRules = false;
+$("#rules").click(() => { 
+    inRules = true;
+    console.log("here")
+    $(".mainmenu").hide();
+    funcGameStart();
+    guiGameStart();
+    $(".page1").show();
+});
+let helpPageCounter = 1;
+$(".helppage").click(function (e) { 
+    e.preventDefault();
+    helpPageCounter++;
+    $(this).hide();
+    if (helpPageCounter < 5) {
+        $(`.page${helpPageCounter}`).show();
+    } else {
+        console.log("here")
+        helpPageCounter = 1;
+        inRules = false;
+        $(".mainmenu").show();
+    }
+});
+
+
+
 
 // Game inits
 function getRandomInt(min, max) {
-    return Math.floor((Math.random() - Math.random()) * (max - min)) + min;
-
+    return Math.floor(Math.abs((Math.random() - Math.random()) * (max - min))) + min;
 }
 function guiRoundStart() {
     console.log(state.playerAWinNum, state.playerBWinNum);
@@ -328,6 +352,7 @@ async function animateWin(str) {
     $("#resetButton").show();
 }
 async function checkForWin() {
+    if (inRules) {return;}
     // process damage
     if (state.result == state.playerAWinNum) {
         state.roundWinState = true;
@@ -421,16 +446,16 @@ function deactivateInvalidOps() {
     let mulRes = op(state.operand1, state.operand2, "mul");
     let divRes = op(state.operand1, state.operand2, "div");
 
-    if (addRes > maxNumInPlay && addRes > 0) {
+    if (addRes > maxNumInPlay) {
         add.hide();
     } 
-    if (mulRes > maxNumInPlay && mulRes > 0) {
+    if (mulRes > maxNumInPlay) {
         mul.hide();
     } 
     if (state.operand2 == 0) {
         div.hide();
     } 
-    if (subRes > maxNumInPlay && subRes < 0) {
+    if (subRes > maxNumInPlay || subRes < 0) {
         sub.hide();
     }
 }
@@ -521,4 +546,8 @@ $("#start").click(() => {
 $(document).ready(() => {
     $(".overlay").hide();
     $("#resetButton").hide();
+    $(".page1").hide();
+    $(".page2").hide();
+    $(".page3").hide();
+    $(".page4").hide();
 });

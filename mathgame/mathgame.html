@@ -31,6 +31,80 @@
 <body>
     <img src="img/output-onlinepngtools (2).png" class="playerAWeapon floatingA" id="sword1A">
     <img src="img/output-onlinepngtools (1).png" class="playerBWeapon floatingB" id="sword1B">
+    <div class="helppage page1 border rounded">
+        <div class="table">
+            <div class="row help1" style="font-size: 10vw;"> <strong>GOAL:</strong> </div>
+            <div class="row help1" style="font-size: 7vw;">
+                Reduce your opponents <br> hit points (HP) to zero!
+            </div>
+            <div class="row help1" style="margin-top: 1vh; font-size: 4vw;">
+                Each player starts with 50 HP <br>
+                Each round you will have an <br> opportunity to hit your opponent
+            </div>
+            <div></div>
+            <div class="row clicktocontinue" style="margin-top: 1vh; font-style: italic; font-size: 4vw; color: grey;">tap here to continue...</div>
+        </div>
+    </div>
+
+    <div class="helppage page2 border rounded">
+        <div class="table">
+            <div class="row" style="font-size: 10vw;"> <strong>EACH ROUND:</strong> </div>
+            <div class="row" style="font-size: 7vw;">
+                Each player chooses their <i><strong>target number</strong></i>
+            </div>
+            <div class="row" style="margin-top: 1vh; font-size: 4vw;">
+                The target # can be 1 to 25
+            </div>
+            <div class="row" style="margin-top: 1vh; font-size: 4vw;">
+                Your target # is displayed in the <br>
+                bottom left of your side of the screen
+            </div>
+            <div class="row" style="margin-top: 3vh; font-size: 7vw;">
+                The round ends when the <br>
+                result reaches either player's <br>
+                <i><strong>target number</strong></i>
+            </div>
+            <div class="row" style="margin-top: 1vh; font-size: 4vw;">
+                You then deal that amount of <br>
+                damage to your opponent
+            </div>
+            <div class="row clicktocontinue" style="margin-top: 1vh; font-style: italic; font-size: 4vw; color: grey;">tap here to continue...</div>
+        </div>
+    </div>
+
+    <div class="helppage page3 border rounded">
+        <div class="table">
+            <div class="row" style="font-size: 10vw;"> <strong>ON YOUR TURN:</strong> </div>
+            <div class="row" style="font-size: 7vw;">
+                Choose an operation: <br>
+                +, −, ×, or ÷
+            </div>
+            <div class="row" style="margin-top: 1vh; font-size: 4vw;">
+                That operation is applied on the two operands...
+            </div>
+
+            <div class="row clicktocontinue" style="margin-top: 1vh; font-style: italic; font-size: 4vw; color: grey;">tap here to continue...</div>
+        </div>
+    </div>
+    <div class="helppage page4 border rounded">
+        <div class="table">
+            <div class="row" style=" font-size: 4vw;">
+                ...and produces the result!
+            </div>
+            <div class="row" style="margin-top: 1vh; font-size: 4vw;">
+                The first operand is then replaced by the result,
+                and a second operand is randomly generated.
+            </div>
+            <div class="row" style="margin-top: 1vh; font-size: 4vw;">
+                This was really poorly explained <br>
+                Just start a game! I'm sure you'll get the <br>
+                hang of it as you play. <br>
+                Good luck, and have fun!
+            </div>
+            <div class="row clicktocontinue" style="margin-top: 1vh; font-style: italic; font-size: 4vw; color: grey;">return to main menu...</div>
+        </div>
+    </div>
+
     <div class="mainmenu">
         <div class="table">
             <div class="row">
@@ -53,7 +127,7 @@
                 <div class="jumbotron-fluid">Enter your target number:</div>
             </div>
             <div class="row">
-                <input class="form-control form-control-lg" type="text" id="winNumInput" placeholder="Your target # (-25 to 25)">
+                <input class="form-control form-control-lg" type="number" id="winNumInput" placeholder="Your target # (1 to 25)">
             </div>
             <div class="row">
                 <button type="button" class="btn btn-primary" id="confirm">Confirm</button>
@@ -67,7 +141,7 @@
 
         <div class="playerTable playerATable table">
             <div class="row"> 
-                <div class="health-bar" id="hbarA" data-total="1" data-value="1">
+                <div class="health-bar" id="hbarA" data-total="50" data-value="50">
                     <div class="bar" id="barA">
                         <div class="hit"></div>
                     </div>
@@ -89,7 +163,7 @@
                 <div class="col opSelectB divB" id="div">÷</div>
             </div>
             <div class="row"> 
-                <div class="health-bar" id="hbarB" data-total="1" data-value="1">
+                <div class="health-bar" id="hbarB" data-total="50" data-value="50">
                     <div class="bar" id="barB">
                         <div class="hit"></div>
                     </div>
