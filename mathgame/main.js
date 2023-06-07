@@ -9,7 +9,6 @@ const winNum = document.getElementsByClassName("winNum");
 const operand1 = document.querySelector("#operand1");
 const operand2 = document.querySelector("#operand2");
 
-var ppu = $(".ppu");
 var neg = $(".neg");
 var hBarA = $('#hbarA'),
     barA = hBarA.find('.bar'),
@@ -22,6 +21,7 @@ const invisibleCharacter = "‎";
 
 // PID
 const numOp2 = 5;
+let maxHP = 50;
 let maxNumOp2 = 12;
 let maxPlayerWinNum = 50;
 let maxNumInPlay = 50;
@@ -103,15 +103,20 @@ $("#resetButton").click(() => {
 let timesClicked = 0;
 $('#confirm').click(() => {
     let value = parseInt($("#winNumInput").val()); 
-    if (value > maxNumInPlay / 2 || value === state.playerAWinNum) {
+    if (value > maxNumInPlay / 2 || value < (-1 * maxNumInPlay) / 2) {
+        return;
+    }
+    if (value < 0 && !$('.neg').is(':checked')) {
         return;
     }
     if (timesClicked === 0) {
+        console.log("here");
         state.playerBWinNum = value;
         $(".overlayContainer").css({
             "transform": "scale(-1, -1)"
         }) 
     } else if (timesClicked === 1) {
+        if (value === state.playerBWinNum) {return;}
         state.playerAWinNum = value;
         $(".overlayContainer").css({
             "transform": ""
@@ -144,12 +149,11 @@ $("#backtomenu").click(function (e) {
 function hitASuccess(HPamount){
     var total = hBarA.data('total'),
         value = hBarA.data('value');
-    if (value < 0) {
-        alert("U DED");
-    }
-    // max damage is essentially quarter of max life
     var damage = HPamount;
     var newValue = value - damage;
+    if (damage < 0 && newValue > maxHP) {
+        newValue = maxHP;
+    }
     // calculate the percentage of the total width
     var barWidth = (newValue / total) * 100;
     var hitWidth = (damage / value) * 100 + "%";
@@ -162,19 +166,15 @@ function hitASuccess(HPamount){
         hitA.css({'width': '0'});
         barA.css('width', barWidth + "%");
     }, 500);
-    
-    
-    if(value < 0){
-        alert("DEAD");
-    }
 }
 function hitBSuccess(HPamount){
     var total = hBarB.data('total'),
         value = hBarB.data('value');
-    // max damage is essentially quarter of max life
     var damage = HPamount;
     var newValue = value - damage;
-    // calculate the percentage of the total width
+    if (damage < 0 && newValue > maxHP) {
+        newValue = maxHP;
+    }    // calculate the percentage of the total width
     var barWidth = (newValue / total) * 100;
     var hitWidth = (damage / value) * 100 + "%";
     
@@ -186,11 +186,6 @@ function hitBSuccess(HPamount){
         hitB.css({'width': '0'});
         barB.css('width', barWidth + "%");
     }, 500);
-    
-    
-    if(value < 0){
-        alert("DEAD");
-    }
 }
 
 
@@ -226,7 +221,7 @@ $(".helppage").click(function (e) {
 
 // Game inits
 function getRandomInt(min, max) {
-    if (neg.checked) {
+    if ($('.neg').is(':checked')) {
         return Math.floor((Math.random() - Math.random()) * (max - min)) + min;
     }
     return Math.floor(Math.abs((Math.random() - Math.random()) * (max - min))) + min;
@@ -256,6 +251,7 @@ function guiRoundStart() {
         $("#result").text(state.result);
     }
     $("#operation").text(strToOpStr[state.operation]);
+    deactivateInvalidOps();
 }
 function guiGameStart() {
     for (var i = 0; i < winNum.length; ++i) {
@@ -345,11 +341,11 @@ function resolveAWin() {
     return new Promise(resolve => {
         setTimeout(() => {
             console.log("ppu checked: ", $('.ppu').is(':checked'));
+            let hitAmount = state.playerAWinNum;
             if ($('.ppu').is(':checked') && isPrime(state.playerAWinNum)) {
-                hitBSuccess(state.playerAWinNum * 2);
-            } else {
-                hitBSuccess(state.playerAWinNum);
+                hitAmount *= 2;
             }
+            hitBSuccess(hitAmount);
         }, 1000);
         setTimeout(() => {
             $(".playerAWeapon").removeClass("swingA");
@@ -364,11 +360,11 @@ function resolveBWin() {
     return new Promise(resolve => {
         setTimeout(() => {
             console.log("ppu checked: ", $('.ppu').is(':checked'));
-            if ($('.ppu').is(':checked') && isPrime(state.playerAWinNum)) {
-                hitASuccess(state.playerBWinNum * 2);
-            } else {
-                hitASuccess(state.playerBWinNum);
+            let hitAmount = state.playerBWinNum;
+            if ($('.ppu').is(':checked') && isPrime(state.playerBWinNum)) {
+                hitAmount *= 2;
             }
+            hitASuccess(hitAmount);
         }, 1000);
         setTimeout(() => {
             $(".playerBWeapon").removeClass("swingB");
@@ -408,10 +404,14 @@ async function checkForWin() {
         animateWin("Blue player wins!");
         // reset winState
         state.winState = false;
+        state.playerAWinNum = 1000;
+        state.playerBWinNum = 10000;
         return;
     } else if (hBarB.data('value') <= 0) {
         animateWin("Red player wins!");
         state.winState = false;
+        state.playerAWinNum = 1000;
+        state.playerBWinNum = 10000;
         return;
     }
 
@@ -484,13 +484,19 @@ function deactivateInvalidOps() {
     if (addRes > maxNumInPlay) {
         add.hide();
     } 
-    if (mulRes > maxNumInPlay) {
+    if (mulRes > maxNumInPlay || mulRes < (-1 * maxNumInPlay)) {
         mul.hide();
     } 
+    if (!$('.neg').is(':checked') && mulRes < 0) {
+        mul.hide();
+    }
     if (state.operand2 == 0) {
         div.hide();
     } 
-    if (subRes > maxNumInPlay || subRes < 0) {
+    if (subRes > maxNumInPlay || subRes < (-1 * maxNumInPlay)) {
+        sub.hide();
+    }
+    if (!$('.neg').is(':checked') && subRes < 0) {
         sub.hide();
     }
 }
