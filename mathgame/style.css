@@ -24,6 +24,26 @@ body {
     z-index: 10000;
     align-items: center;
 }
+.form-switch {
+    margin-bottom: 4vh !important;
+    transform: scale(1.2, 1.2);
+}
+.optionsmenu {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    background: linear-gradient(0deg,
+            rgba(91, 142, 224, 1) 0%,
+            white 20%,
+            white 80%,
+            rgba(212, 67, 67, 1) 100%);
+    display: flex;
+    flex-direction: row;
+    flex-basis: auto;
+    text-align: center;
+    z-index: 10000;
+    align-items: center;
+}
 .helppage {
     display: flex;
     flex-direction: row;

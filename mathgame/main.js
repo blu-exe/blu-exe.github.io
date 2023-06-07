@@ -9,6 +9,8 @@ const winNum = document.getElementsByClassName("winNum");
 const operand1 = document.querySelector("#operand1");
 const operand2 = document.querySelector("#operand2");
 
+var ppu = $(".ppu");
+var neg = $(".neg");
 var hBarA = $('#hbarA'),
     barA = hBarA.find('.bar'),
     hitA = hBarA.find('.hit');
@@ -20,9 +22,9 @@ const invisibleCharacter = "‎";
 
 // PID
 const numOp2 = 5;
-const maxNumOp2 = 12;
-const maxPlayerWinNum = 50;
-const maxNumInPlay = 50;
+let maxNumOp2 = 12;
+let maxPlayerWinNum = 50;
+let maxNumInPlay = 50;
 let state = {
     roundWinState: false,
     winState: false,
@@ -105,12 +107,12 @@ $('#confirm').click(() => {
         return;
     }
     if (timesClicked === 0) {
-        state.playerAWinNum = value;
+        state.playerBWinNum = value;
         $(".overlayContainer").css({
             "transform": "scale(-1, -1)"
         }) 
     } else if (timesClicked === 1) {
-        state.playerBWinNum = value;
+        state.playerAWinNum = value;
         $(".overlayContainer").css({
             "transform": ""
         }) 
@@ -127,6 +129,16 @@ $('#confirm').click(() => {
     }
     console.log(state);
     timesClicked++;
+});
+$("#options").click(function (e) { 
+    e.preventDefault();
+    $(".mainmenu").hide();
+    $(".optionsmenu").show();
+});
+$("#backtomenu").click(function (e) { 
+    e.preventDefault();
+    $(".optionsmenu").hide();
+    $(".mainmenu").show();
 });
 
 function hitASuccess(HPamount){
@@ -214,6 +226,9 @@ $(".helppage").click(function (e) {
 
 // Game inits
 function getRandomInt(min, max) {
+    if (neg.checked) {
+        return Math.floor((Math.random() - Math.random()) * (max - min)) + min;
+    }
     return Math.floor(Math.abs((Math.random() - Math.random()) * (max - min))) + min;
 }
 function guiRoundStart() {
@@ -313,12 +328,28 @@ function funcGameStart() {
 
 
 // Win helpers
+function isPrime(num) {
+    var sqrtnum = Math.floor(Math.sqrt(num));
+    var prime = num != 1;
+    for (var i=2; i<sqrtnum+1; i++) { // sqrtnum+1
+        if (num % i == 0) {
+            prime = false;
+            break;
+        }
+    }
+    return prime;
+}
 function resolveAWin() {
     $(".playerAWeapon").removeClass("floatingA");
     $(".playerAWeapon").addClass("swingA");
     return new Promise(resolve => {
         setTimeout(() => {
-            hitBSuccess(state.playerAWinNum);
+            console.log("ppu checked: ", $('.ppu').is(':checked'));
+            if ($('.ppu').is(':checked') && isPrime(state.playerAWinNum)) {
+                hitBSuccess(state.playerAWinNum * 2);
+            } else {
+                hitBSuccess(state.playerAWinNum);
+            }
         }, 1000);
         setTimeout(() => {
             $(".playerAWeapon").removeClass("swingA");
@@ -332,7 +363,12 @@ function resolveBWin() {
     $(".playerBWeapon").addClass("swingB");
     return new Promise(resolve => {
         setTimeout(() => {
-            hitASuccess(state.playerBWinNum);
+            console.log("ppu checked: ", $('.ppu').is(':checked'));
+            if ($('.ppu').is(':checked') && isPrime(state.playerAWinNum)) {
+                hitASuccess(state.playerBWinNum * 2);
+            } else {
+                hitASuccess(state.playerBWinNum);
+            }
         }, 1000);
         setTimeout(() => {
             $(".playerBWeapon").removeClass("swingB");
@@ -549,4 +585,5 @@ $(document).ready(() => {
     $(".page2").hide();
     $(".page3").hide();
     $(".page4").hide();
+    $(".optionsmenu").hide();
 });
