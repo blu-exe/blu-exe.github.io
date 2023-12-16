@@ -16,7 +16,13 @@
     <div class="upper-padding" style="padding-top:20px"></div>
     <div class="container full-screen is-fluid"> </div>
     <div class="numpad-container">
-        <input type="text" id="display" readonly>
+        <!-- <input type="text" id="display" readonly> -->
+        <div class="op-buttons">
+            <button onclick="addToDisplayOp(1)">＋</button>
+            <button onclick="addToDisplayOp(2)">－</button>
+            <button onclick="addToDisplayOp(3)">×</button>
+            <button onclick="addToDisplayOp(4)">÷</button>
+        </div>
         <div class="buttons">
             <button onclick="addToDisplay(1)">1</button>
             <button onclick="addToDisplay(2)">2</button>
@@ -28,8 +34,26 @@
             <button onclick="addToDisplay(8)">8</button>
             <button onclick="addToDisplay(9)">9</button>
             <button onclick="addToDisplay(0)">0</button>
-            <button onclick="clearDisplay()">Clear</button>
+            <button onclick="clearDisplay()" style="font-size: 12pt;">Clear</button>
+            <button onclick="guess()" style="font-size: 12pt;">Guess</button>
         </div>
+    </div>
+    <div class="tokens">
+        <!-- First Row -->
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+    
+        <!-- Second Row -->
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
+        <div class="circle"></div>
     </div>
   </body>
 </html>
