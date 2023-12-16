@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Token Game</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="./tokengame.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <link rel="stylesheet" type="text/css" href = "./style.css">
+
+  </head>
+
+
+  <body>
+    <div class="upper-padding" style="padding-top:20px"></div>
+    <div class="container full-screen is-fluid"> </div>
+    <div class="numpad-container">
+        <input type="text" id="display" readonly>
+        <div class="buttons">
+            <button onclick="addToDisplay(1)">1</button>
+            <button onclick="addToDisplay(2)">2</button>
+            <button onclick="addToDisplay(3)">3</button>
+            <button onclick="addToDisplay(4)">4</button>
+            <button onclick="addToDisplay(5)">5</button>
+            <button onclick="addToDisplay(6)">6</button>
+            <button onclick="addToDisplay(7)">7</button>
+            <button onclick="addToDisplay(8)">8</button>
+            <button onclick="addToDisplay(9)">9</button>
+            <button onclick="addToDisplay(0)">0</button>
+            <button onclick="clearDisplay()">Clear</button>
+        </div>
+    </div>
+  </body>
+</html>
