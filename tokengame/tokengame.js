@@ -4,15 +4,42 @@ const plusChar = "＋";
 const minusChar = "－";
 const multChar = "×";
 const divChar = "÷";
-const opBindings = {"＋":1, "－":2, "×":3, "÷":4, "=":5};
+const opBindings = {"+":"＋", "-":"－", "*":"×", "/":"÷", "=":"="};
+const numTokens = 12;
+
 
 //global vars
 let rowCounter = 0;
 let currentFocusBox = undefined;
 let curSoln = "";
+let curNumBoxes = undefined;
 
 
 //LOGIC
+function checkForValidEquation() {
+    let lhs = "";
+    let rhs = "";
+    let reachedEquals = false;
+    $('.row' + String(rowCounter)).children().each(function() {
+        if ($(this).text() === "=") {
+            reachedEquals = true;
+        } else {
+            if (reachedEquals) {
+                rhs += $(this).text();
+            } else {
+                lhs += $(this).text();
+            }
+        }
+    });
+    return eval(lhs) === eval(rhs);
+}
+function checkForWin() {
+    let input = "";
+    $('.row' + String(rowCounter)).children().each(function() {
+        input += ($(this).text() === "") ? " " : $(this).text();
+    });
+    return input === curSoln;
+} 
 function getRandomInt(min, max) {
     min = Math.ceil(min);   // Round up the minimum value
     max = Math.floor(max);  // Round down the maximum value
@@ -61,17 +88,26 @@ function generateSoln(totalLength) {
       return generateSoln(totalLength);
     }
 }
-function checkForWin() {
-
-}
 function guess() {
-    
+    console.log("checking")
+    if (!checkForValidEquation()) {
+        console.log("invalid eq");
+        $('#shakeDiv').addClass('shake-animation');
+        setTimeout(function() {
+            $('#shakeDiv').removeClass('shake-animation');
+        }, 500);
+        return;
+    }
+    console.log("valid eq, checking for win");
+    if (checkForWin()) {
+        alert("win");
+    }
 }
 
 //HTML COMPONENTS
 function createBoxes(numBoxes) {
     console.log("creating " + numBoxes + " boxes")
-    let newRow = $(".full-screen").append(`<div class="columns is-mobile is-centered new-cols">`);
+    let newRow = $(".full-screen").append(`<div class="columns is-mobile is-centered new-cols shakeDiv">`);
     for (let i = 0; i < numBoxes; i++) {
         $(".new-cols").append(`
             <div class="column digit-box" id="${rowCounter}-${i}" style="height:${window.innerHeight/9}">${invisibleCharacter}
@@ -82,15 +118,46 @@ function createBoxes(numBoxes) {
     rowCounter++;
     $(".new-cols").removeClass("new-cols");
 }
+function setupBoxes() {
+    for (let i = 0; i < curSoln.length; i++) {
+        if (curSoln[i] === "=") {
+            $("#0-" + String(i)).html(opBindings["="]);
+        }
+    }
+}
 
 //CLICK LISTENERS
-//uhm for some reason I couldn't get it to click on elems other than document...
 function addToDisplay(value) {
-    if (currentFocusBox != undefined){
+    //insert value
+    if (currentFocusBox != undefined && document.getElementById(currentFocusBox).innerHTML != "="){
         document.getElementById(currentFocusBox).innerHTML = value;
+    }
+    
+    //move to next digit box
+    let col = currentFocusBox.charAt(currentFocusBox.length - 1);
+    if (col < curNumBoxes) {
+        for (let i = 0; i < rowCounter; i++) {
+            for (let j = 0; j < 7; j++) {
+                $("#" + i + "-" + j).css('background-color', 'transparent');
+            }      
+        }
+        currentFocusBox = currentFocusBox.charAt(0) + "-" + String(Number(col) + 1);
+        console.log(currentFocusBox);
+        $("#" + currentFocusBox).css('background-color', 'rgba(255, 165, 0, 0.25)');
     }
 }
 function addToDisplayOp(value) {
+    let col = currentFocusBox.charAt(currentFocusBox.length - 1);
+    if (col < curNumBoxes) {
+        for (let i = 0; i < rowCounter; i++) {
+            for (let j = 0; j < 7; j++) {
+                $("#" + i + "-" + j).css('background-color', 'transparent');
+            }      
+        }
+        currentFocusBox = currentFocusBox.charAt(0) + "-" + String(Number(col) + 1);
+        console.log(currentFocusBox);
+        $("#" + currentFocusBox).css('background-color', 'rgba(255, 165, 0, 0.25)');
+    }
     switch (value) {
         case 1:
             document.getElementById(currentFocusBox).innerHTML = plusChar;
@@ -112,12 +179,12 @@ function clearDisplay() {
     }
 }
 $(document).on("click", function(event) {
-    //log information about the tapped element
+    //uhm for some reason I couldn't get it to click on elems other than document...
     let id = event.target.id;
     let className = event.target.className;
 
-    console.log("Tapped element ID:", id);
-    console.log("Tapped element Class:", className);
+    // console.log("Tapped element ID:", id);
+    // console.log("Tapped element Class:", className);
     
     //digit boxes
     if(className.includes("digit-box")){
@@ -135,9 +202,12 @@ $(document).on("click", function(event) {
 
 //MAIN
 $(document).ready(() => {
+    curNumBoxes = 7;
     createBoxes(7);
     curSoln = generateSoln(7);
     console.log(curSoln);
+
+    setupBoxes();
 });
 
 
