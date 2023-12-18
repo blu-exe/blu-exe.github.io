@@ -4,18 +4,35 @@ const plusChar = "＋";
 const minusChar = "－";
 const multChar = "×";
 const divChar = "÷";
-const opBindings = {"＋":"+", "－":"-", "×":"*", "÷":"/", "=": "="};
+const opBindings = {"＋":"+", "－":"-", "×":"*", "÷":"/", "=": "=", "‎": " "};
+const opBindingsSwapped = {'+': '＋','-': '－','*': '×','/': '÷','=': '=', " ": "‎"};
 const numTokens = 12;
 
 
 //global vars
 let rowCounter = 0;
 let currentFocusBox = undefined;
+let curLockedBoxes = [];
 let curSoln = "";
 let curNumBoxes = undefined;
+let tokensRemaining = 12;
 
 
-//LOGIC
+//LOGIC HELPERS
+function convertInverse(str) {
+    let res = "";
+    for (let i in str) {
+        if (isNaN(str[i]) && !Number.isInteger(parseInt(str[i]))) {
+            // console.log("read " + str[i], " appending " + opBindings[str[i]]);
+            res += opBindingsSwapped[str[i]];
+        } else {
+            // console.log("read " + str[i], " appending " + str[i]);
+            res += str[i];
+        }
+    }
+    // console.log("converted to " + res);
+    return res;
+}
 function convert(str) {
     let res = "";
     for (let i in str) {
@@ -25,35 +42,7 @@ function convert(str) {
             res += str[i];
         }
     }
-    console.log("converted to " + res);
     return res;
-}
-function checkForValidEquation() {
-    console.log("checking valid")
-    let lhs = "";
-    let rhs = "";
-    let reachedEquals = false;
-    $('.row' + String(rowCounter - 1)).children().each(function () {
-        if ($(this).text() === "=") {
-            reachedEquals = true;
-        } else {
-            if (reachedEquals) {
-                rhs += $(this).text();
-            } else {
-                lhs += $(this).text();
-            }
-        }
-    });
-    console.log("lhs = " + lhs + ", rhs = " + rhs);
-    console.log("lhs = " + eval(convert(lhs)) + ", rhs = " + eval(convert(rhs)));
-    return (eval(convert(lhs)) === eval(convert(rhs)));
-}
-function checkForWin() {
-    let input = "";
-    $('.row' + String(rowCounter - 1)).children().each(function () {
-        input += ($(this).text() === "") ? " " : $(this).text();
-    });
-    return input === curSoln;
 }
 function getRandomInt(min, max) {
     min = Math.ceil(min);   // Round up the minimum value
@@ -103,25 +92,20 @@ function generateSoln(totalLength) {
         return generateSoln(totalLength);
     }
 }
-function guess() {
-    console.log("checking")
-    if (!checkForValidEquation()) {
-        console.log("invalid eq");
-        $('.shakeDiv').addClass('shake');
-        setTimeout(function() {
-            $('.shakeDiv').removeClass('shake');
-        }, 500);
-        return;
-    }
-    console.log("valid eq, checking for win");
-    if (checkForWin()) {
-        alert("win");
-    }
-}
 
-//HTML COMPONENTS
+//UI HELPERS
+function currentFocusCol() {
+    return currentFocusBox == undefined ? undefined : Number(currentFocusBox.charAt(currentFocusBox.length - 1));
+}
+function isLocked(col) {
+    for (let i in curLockedBoxes) {
+        if (curLockedBoxes[i] === col) {
+            return true;
+        }
+    }
+    return false;
+}
 function createBoxes(numBoxes) {
-    console.log("creating " + numBoxes + " boxes")
     let newRow = $(".full-screen").append(`<div class="columns is-mobile is-centered new-cols shakeDiv">`);
     for (let i = 0; i < numBoxes; i++) {
         $(".new-cols").append(`
@@ -136,14 +120,100 @@ function createBoxes(numBoxes) {
 function setupBoxes() {
     for (let i = 0; i < curSoln.length; i++) {
         if (curSoln[i] === "=") {
-            $("#0-" + String(i)).html(opBindings["="]);
+            $("#" + String(rowCounter - 1) + "-" + String(i)).html(opBindings["="]);
         }
     }
+}
+function removeTokens(num) {
+    for (let i = 0; i < num; i++) {
+        $("#" + (tokensRemaining - i)).hide();
+    }
+    tokensRemaining -= num;
+}
+
+//GUESS
+function checkForValidEquation() {
+    console.log("checking valid")
+    let lhs = "";
+    let rhs = "";
+    let reachedEquals = false;
+    $('.row' + String(rowCounter - 1)).children().each(function () {
+        if ($(this).text() === "=") {
+            reachedEquals = true;
+        } else {
+            if (reachedEquals) {
+                rhs += $(this).text();
+            } else {
+                lhs += $(this).text();
+            }
+        }
+    });
+    console.log("lhs = " + lhs + ", rhs = " + rhs);
+    console.log("lhs = " + eval(convert(lhs)) + ", rhs = " + eval(convert(rhs)));
+    return (eval(convert(lhs)) === eval(convert(rhs)));
+}
+function checkForWin() {
+    console.log("checking win")
+    let input = "";
+    $('.row' + String(rowCounter - 1)).children().each(function () {
+        input += ($(this).text() === "") ? " " : $(this).text();
+    });
+    console.log("input = " + convert(input) + ", curSoln = " + curSoln);
+    return convert(input) === curSoln;
+}
+function guess() {
+    if (!checkForValidEquation()) {
+        //if invalid, shake
+        console.log("invalid eq");
+        $('.shakeDiv').addClass('shake');
+        setTimeout(function() {
+            $('.shakeDiv').removeClass('shake');
+        }, 500);
+        return;
+    }
+    console.log("valid eq, checking for win");
+
+    //check for win
+    if (checkForWin()) {
+        //if win, go next stage
+        openModal();
+    } else {
+        //if wrong, lose token
+        removeTokens(1);
+
+        //start new row
+        createBoxes(curNumBoxes);
+        setupBoxes();
+    }
+}
+
+//HINT
+function hint() {
+    if (isLocked(currentFocusCol())) {
+        return;
+    }
+
+    //remove tokens
+    if (tokensRemaining < 2) {
+        $('.numpad-container').addClass('shake');
+        setTimeout(function() {
+            $('.numpad-container').removeClass('shake');
+        }, 500);
+        return;
+    }
+    removeTokens(2);
+
+    //give hint
+    document.getElementById(currentFocusBox).innerHTML = convertInverse(curSoln.charAt(currentFocusCol()));
+    curLockedBoxes.shift(currentFocusCol());
 }
 
 //CLICK LISTENERS
 function addToDisplay(value) {
     //insert value
+    if (isLocked(currentFocusCol())) {
+        return;
+    }
     if (currentFocusBox != undefined && document.getElementById(currentFocusBox).innerHTML != "=") {
         document.getElementById(currentFocusBox).innerHTML = value;
     }
@@ -157,7 +227,6 @@ function addToDisplay(value) {
             }
         }
         currentFocusBox = currentFocusBox.charAt(0) + "-" + String(Number(col) + 1);
-        console.log(currentFocusBox);
         $("#" + currentFocusBox).css('background-color', 'rgba(255, 165, 0, 0.25)');
     }
 }
@@ -194,16 +263,24 @@ function addToDisplayOp(value) {
 }
 function clearDisplay() {
     if (currentFocusBox != undefined) {
-        document.getElementById(currentFocusBox).innerHTML = "";
+        $('.row' + String(rowCounter - 1)).children().each(function () {
+            if ($(this).text() != "=") {
+                $(this).text(invisibleCharacter);
+            }
+        });
     }
+}
+function openModal() {
+    $(".winModalText").html("You won with " + numTokens + " tokens!");
+    document.getElementById('winModal').classList.add('is-active');
+}
+function closeModal() {
+    document.getElementById('winModal').classList.remove('is-active');
 }
 $(document).on("click", function (event) {
     //uhm for some reason I couldn't get it to click on elems other than document...
     let id = event.target.id;
     let className = event.target.className;
-
-    // console.log("Tapped element ID:", id);
-    // console.log("Tapped element Class:", className);
 
     //digit boxes
     if (className.includes("digit-box")) {
@@ -218,15 +295,21 @@ $(document).on("click", function (event) {
     }
 });
 
-
 //MAIN
-$(document).ready(() => {
+$(function() {
+    //setup main container bounds
+    let numPadTop = $('.numpad-container').offset().top;
+    console.log(numPadTop);
+    $(".full-screen").css("height", numPadTop + "px");
+
+    //generate inital boxes
     curNumBoxes = 7;
-    createBoxes(7);
+    createBoxes(curNumBoxes);
     curSoln = generateSoln(7);
-    console.log(curSoln);
-
+    console.log("current soln: " + curSoln);
     setupBoxes();
+
+    //put cursor on first box
+    currentFocusBox = "0-0";
+    $("#" + currentFocusBox).css('background-color', 'rgba(255, 165, 0, 0.25)');
 });
-
-

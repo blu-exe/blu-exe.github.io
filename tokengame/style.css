@@ -64,3 +64,13 @@ button {
     75% { transform: translateX(-5px); }
     100% { transform: translateX(0); }
 }
+
+#winModal {
+    top: -30%;
+}
+
+.full-screen {
+    padding-top: 30px;
+    position: absolute;
+    overflow-y: auto;
+}

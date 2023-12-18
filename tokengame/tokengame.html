@@ -13,7 +13,6 @@
 
 
   <body>
-    <div class="upper-padding" style="padding-top:20px"></div>
     <div class="container full-screen is-fluid"> </div>
     <div class="numpad-container">
         <!-- <input type="text" id="display" readonly> -->
@@ -35,25 +34,41 @@
             <button onclick="addToDisplay(9)">9</button>
             <button onclick="addToDisplay(0)">0</button>
             <button onclick="clearDisplay()" style="font-size: 12pt;">Clear</button>
+            <button onclick="hint()" style="font-size: 12pt;">Hint</button>
             <button onclick="guess()" style="font-size: 12pt;">Guess</button>
         </div>
     </div>
     <div class="tokens">
         <!-- First Row -->
-        <div class="circle"></div>
-        <div class="circle"></div>
-        <div class="circle"></div>
-        <div class="circle"></div>
-        <div class="circle"></div>
-        <div class="circle"></div>
+        <div class="circle" id="1"></div>
+        <div class="circle" id="2"></div>
+        <div class="circle" id="3"></div>
+        <div class="circle" id="4"></div>
+        <div class="circle" id="5"></div>
+        <div class="circle" id="6"></div>
     
         <!-- Second Row -->
-        <div class="circle"></div>
-        <div class="circle"></div>
-        <div class="circle"></div>
-        <div class="circle"></div>
-        <div class="circle"></div>
-        <div class="circle"></div>
+        <div class="circle" id="7"></div>
+        <div class="circle" id="8"></div>
+        <div class="circle" id="9"></div>
+        <div class="circle" id="10"></div>
+        <div class="circle" id="11"></div>
+        <div class="circle" id="12"></div>
     </div>
+
+
+
+    <div class="modal" id="winModal">
+      <div class="modal-background"></div>
+      <div class="modal-content is-mobile is-fullwidth-desktop is-half-tablet">
+        <div class="box">
+          <p class="title">Congratulations!</p>
+          <div class="winModalText">You've won!</div>
+        </div>
+      </div>
+      <button class="modal-close is-large" aria-label="close" id="closeModal" onclick="closeModal()"></button>
+    </div>
+
+
   </body>
 </html>
